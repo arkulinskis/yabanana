@@ -463,6 +463,7 @@
         '<div class="ui-footer-links">' +
         '<a href="#home" data-go="home">Stage</a><a href="#charts" data-go="charts">Charts</a><a href="#beats" data-go="beats">Beats &amp; theory</a><a href="#lab" data-go="lab">Rhyme lab</a>' +
         '<a href="#landing" data-go="landing">About</a>' +
+        '<a href="https://prepsto.com/#f/gncbgnf" target="_blank" rel="noopener" data-prepsto-open>Suggest an idea</a>' +
         '<button type="button" data-feedback>Send feedback</button>' +
         '<button type="button" data-lk-open="overview">Privacy &amp; Terms</button>' +
         '</div><p class="ui-footer-legal small muted">© ' + new Date().getFullYear() + ' ' + esc(UI.config.name) + ' · Peel back the beat 🍌</p></div>';
