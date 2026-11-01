@@ -424,13 +424,44 @@ metadata:
   description: Write bars, poems and hooks over 12 beats built from song and poetry theory. Rhymes, similes and metaphors
     on tap; share your lyrics, get reviews and upvotes.
   logo_img: asset:icon-512.png
-  title: 'Yabanana: write lyrics over beats'
+  title: 'Yabanana: write lyrics, raps and poems over beats'
 name: Yabanana
 native_deps:
-  head_html: "<script src=\"_/theme/legal-kit.js?v=92c1c15a83\"></script>\n<meta name=\"viewport\" content=\"width=device-width,\
-    \ initial-scale=1, viewport-fit=cover\">\n<meta name=\"theme-color\" content=\"#ffc21a\">\n<meta name=\"apple-mobile-web-app-capable\"\
-    \ content=\"yes\">\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"\
-    https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=DM+Sans:opsz,wght@9..40,400..700&family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&display=swap\"\
+  head_html: "<script src=\"_/theme/legal-kit.js?v=92c1c15a83\"></script>\n<!-- seo:start (APP_MAKER/seo: edit seo/apps/yabanana.json\
+    \ and run seo.py, not here) -->\n<link rel=\"canonical\" href=\"https://yabanana.com/\">\n<meta name=\"robots\" content=\"\
+    index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1\">\n<meta name=\"keywords\" content=\"write\
+    \ lyrics online, rap lyrics writer, rhyme finder, songwriting app, poetry writing app, beats to write to, hook writing,\
+    \ lyrics community, rhyme scheme\">\n<meta name=\"author\" content=\"Arkvital\">\n<meta property=\"og:type\" content=\"\
+    website\">\n<meta property=\"og:site_name\" content=\"Yabanana\">\n<meta property=\"og:title\" content=\"Yabanana: write\
+    \ lyrics, raps and poems over beats\">\n<meta property=\"og:description\" content=\"Write bars, poems and hooks over 12\
+    \ beats built from song and poetry theory. Rhymes, similes and metaphors on tap; share your lyrics, get reviews and upvotes.\"\
+    >\n<meta property=\"og:locale\" content=\"en_CA\">\n<meta property=\"og:url\" content=\"https://yabanana.com/\">\n<meta\
+    \ property=\"og:image\" content=\"https://yabanana.com/_/theme/og-image.png\">\n<meta property=\"og:image:width\" content=\"\
+    1200\"><meta property=\"og:image:height\" content=\"630\">\n<meta property=\"og:image:alt\" content=\"Yabanana: Write\
+    \ bars, poems and hooks over beats, with rhymes on tap\">\n<meta name=\"twitter:card\" content=\"summary_large_image\"\
+    >\n<meta name=\"twitter:title\" content=\"Yabanana: write lyrics, raps and poems over beats\">\n<meta name=\"twitter:description\"\
+    \ content=\"Write bars, poems and hooks over 12 beats built from song and poetry theory. Rhymes, similes and metaphors\
+    \ on tap; share your lyrics, get reviews and upvotes.\">\n<meta name=\"twitter:image\" content=\"https://yabanana.com/_/theme/og-image.png\"\
+    >\n<link rel=\"alternate\" type=\"text/plain\" title=\"Yabanana for AI assistants\" href=\"https://yabanana.com/llms.txt\"\
+    >\n<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@graph\": [{\"@type\": \"WebApplication\"\
+    , \"@id\": \"https://yabanana.com/#app\", \"name\": \"Yabanana\", \"url\": \"https://yabanana.com/\", \"description\"\
+    : \"Write bars, poems and hooks over 12 beats built from song and poetry theory. Rhymes, similes and metaphors on tap;\
+    \ share your lyrics, get reviews and upvotes.\", \"image\": \"https://yabanana.com/_/theme/og-image.png\", \"inLanguage\"\
+    : \"en\", \"publisher\": {\"@id\": \"https://arkvital.com/#org\"}, \"keywords\": \"write lyrics online, rap lyrics writer,\
+    \ rhyme finder, songwriting app, poetry writing app, beats to write to, hook writing, lyrics community, rhyme scheme\"\
+    , \"applicationCategory\": \"MultimediaApplication\", \"operatingSystem\": \"Any (web browser)\", \"browserRequirements\"\
+    : \"Requires JavaScript and a modern web browser\", \"featureList\": [\"Twelve beats built from song and poetry theory\"\
+    , \"Rhymes, similes, metaphors and theme palettes one click away\", \"A rhyme map that colours your rhyme scheme\", \"\
+    Perform mode: the beat plays and the lyrics light up word by word\", \"The Stage: upvotes, reviews, charts and remixes\"\
+    ], \"audience\": {\"@type\": \"Audience\", \"audienceType\": \"Rappers, poets and pop songwriters\"}}, {\"@type\": \"\
+    WebSite\", \"@id\": \"https://yabanana.com/#site\", \"url\": \"https://yabanana.com/\", \"name\": \"Yabanana\", \"publisher\"\
+    : {\"@id\": \"https://arkvital.com/#org\"}}, {\"@type\": \"Organization\", \"@id\": \"https://arkvital.com/#org\", \"\
+    name\": \"Arkvital\", \"url\": \"https://arkvital.com\", \"email\": \"arkvital@outlook.com\", \"address\": {\"@type\"\
+    : \"PostalAddress\", \"addressLocality\": \"Montreal\", \"addressRegion\": \"QC\", \"addressCountry\": \"CA\"}}]}</script>\n\
+    <!-- seo:end -->\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n<meta\
+    \ name=\"theme-color\" content=\"#ffc21a\">\n<meta name=\"apple-mobile-web-app-capable\" content=\"yes\">\n<link rel=\"\
+    preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n\
+    <link href=\"https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=DM+Sans:opsz,wght@9..40,400..700&family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&display=swap\"\
     \ rel=\"stylesheet\">\n<link id=\"ui-favicon\" rel=\"icon\" type=\"image/svg+xml\" href=\"_/theme/icon.svg?v=fefbf6f82d\"\
     >\n<link rel=\"apple-touch-icon\" href=\"_/theme/icon-180.png?v=fefbf6f82d\">\n<script>\n/* Keep our tab icon: Anvil adds\
     \ its own <link rel=\"icon\">, so drop any other icon link. */\n(function () {\n  function keep() {\n    var ours = document.getElementById('ui-favicon');\n\
