@@ -1,0 +1,8 @@
+<div class="st-row">
+  <anvil-component type="Yabanana.Components.Avatar" name="avatar" bind:author="self.item['author']"></anvil-component>
+  <div class="grow">
+    <b><anvil-component type="Link" name="title_link" prop:role='["row-link"]' bind:text="self.item['title']"></anvil-component></b>
+    <anvil-component type="Label" name="meta" prop:role='["row-meta"]'></anvil-component>
+  </div>
+  <anvil-component type="Yabanana.Components.Upvote" name="upvote" bind:song="self.item"></anvil-component>
+</div>

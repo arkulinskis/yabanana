@@ -1,0 +1,15 @@
+---
+custom_component: true
+properties:
+  - name: scene
+    type: string
+    default_value: rap
+    description: rap, poetry or pop
+    default_binding_prop: true
+toolbox_item:
+  title: Scene badge
+  group: Yabanana
+help_text: |
+  The RAP / POETRY / POP pill in the scene's colour.
+---
+<span class="yb-badge-host"><span class="yb-scene" anvil:name="pill"><anvil-component type="Label" name="label" prop:role='["scene-name"]' prop:text="Rap"></anvil-component></span></span>

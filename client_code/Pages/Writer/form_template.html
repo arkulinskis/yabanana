@@ -1,0 +1,47 @@
+<anvil-form layout="Yabanana.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <div class="ui-empty" anvil:name="missing">
+        <i class="ic ic-user"></i>
+        <h1 class="empty-h1">We couldn't find that writer</h1>
+        <a class="ui-btn primary" href="#home"><i class="ic ic-shuffle"></i>Go to the Stage</a>
+      </div>
+      <div anvil:name="writer_part">
+        <div class="wr-head" anvil:name="head">
+          <anvil-component type="Yabanana.Components.Avatar" name="avatar" prop:big="true"></anvil-component>
+          <div class="wr-body">
+            <div class="wr-badges">
+              <anvil-component type="Yabanana.Components.SceneBadge" name="badge"></anvil-component>
+              <span class="yb-ripe" anvil:name="ripe"><i class="ic ic-banana" anvil:name="ripe_icon"></i><anvil-component type="Label" name="ripe_name" prop:role='["inline"]'></anvil-component></span>
+              <anvil-component type="Label" name="joined" prop:role='["fine-print"]'></anvil-component>
+            </div>
+            <anvil-component type="Label" name="name" prop:role='["wr-title"]'></anvil-component>
+            <anvil-component type="Label" name="bio" prop:role='["wr-bio"]'></anvil-component>
+            <p class="muted small" anvil:name="bio_hint">Add a bio and your scene in <a href="#profile">your profile</a>.</p>
+            <div class="wr-nums">
+              <div><anvil-component type="Label" name="n_songs" prop:role='["wr-num"]'></anvil-component><span>songs on stage</span></div>
+              <div><anvil-component type="Label" name="n_upvotes" prop:role='["wr-num"]'></anvil-component><span>bananas received</span></div>
+              <div><anvil-component type="Label" name="n_reviews" prop:role='["wr-num"]'></anvil-component><span>reviews written</span></div>
+              <div><anvil-component type="Label" name="n_bunch" prop:role='["wr-num"]'></anvil-component><span>songs in their Bunch</span></div>
+            </div>
+            <div class="wr-meter" anvil:name="meter">
+              <i class="wr-bar"><em anvil:name="meter_fill"></em></i>
+              <anvil-component type="Label" name="meter_text" prop:role='["fine-print"]'></anvil-component>
+            </div>
+            <div class="ui-row wr-mine" anvil:name="mine">
+              <a class="ui-btn sm" href="#profile"><i class="ic ic-edit"></i>Edit profile</a>
+              <a class="ui-btn sm primary" href="#studio"><i class="ic ic-pen"></i>Your studio</a>
+            </div>
+          </div>
+        </div>
+        <h2>Songs</h2>
+        <anvil-component type="RepeatingPanel" name="songs_panel" prop:item_template="Yabanana.Items.SongCard" prop:role='["yb-cards"]'></anvil-component>
+        <div class="ui-empty" anvil:name="empty">
+          <i class="ic ic-mic"></i>
+          <h3>No songs on stage yet</h3>
+          <anvil-component type="Label" name="empty_text"></anvil-component>
+        </div>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

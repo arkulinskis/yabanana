@@ -1,0 +1,23 @@
+<anvil-form layout="Yabanana.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <div class="ui-page-head">
+        <div><div class="eyebrow">Studio</div><h1>Your notebook</h1><p class="muted">Drafts stay private until you share them.</p></div>
+        <a class="ui-btn primary lg" href="#studio/new"><i class="ic ic-plus"></i>New song</a>
+      </div>
+      <div class="sd-totals">
+        <div class="ui-card ui-stat"><anvil-component type="Label" name="t_published" prop:role='["stat-num"]'></anvil-component><span>on stage</span></div>
+        <div class="ui-card ui-stat"><anvil-component type="Label" name="t_drafts" prop:role='["stat-num"]'></anvil-component><anvil-component type="Label" name="t_drafts_word" prop:role='["stat-word"]'></anvil-component></div>
+        <div class="ui-card ui-stat"><anvil-component type="Label" name="t_upvotes" prop:role='["stat-num"]'></anvil-component><span>bananas</span></div>
+        <div class="ui-card ui-stat"><anvil-component type="Label" name="t_reviews" prop:role='["stat-num"]'></anvil-component><span>reviews</span></div>
+      </div>
+      <anvil-component type="RepeatingPanel" name="songs_panel" prop:item_template="Yabanana.Items.StudioSong" prop:role='["sd-list"]'></anvil-component>
+      <div class="ui-empty" anvil:name="empty">
+        <i class="ic ic-pen"></i>
+        <h3>Your notebook is empty</h3>
+        <p>Pick a scene and a beat, and write your first lines. Rhymes are one click away.</p>
+        <a class="ui-btn primary" href="#studio/new"><i class="ic ic-plus"></i>Start your first song</a>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

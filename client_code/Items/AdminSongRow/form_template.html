@@ -1,0 +1,20 @@
+<div class="ui-item ad-song">
+  <div class="grow">
+    <div class="meta">
+      <anvil-component type="Yabanana.Components.SceneBadge" name="badge" bind:scene="self.item['scene']"></anvil-component>
+      <b><anvil-component type="Link" name="title_link" prop:role='["row-link"]' bind:text="self.item['title']"></anvil-component></b>
+      <anvil-component type="Label" name="by"></anvil-component>
+      <anvil-component type="Label" name="status" bind:text="self.item['status']"></anvil-component>
+      <span class="yb-count"><i class="ic ic-banana"></i><anvil-component type="Label" name="upvotes" bind:text="str(self.item['upvotes'])"></anvil-component><i class="ic ic-chat"></i><anvil-component type="Label" name="reviews" bind:text="str(self.item['review_count'])"></anvil-component></span>
+      <anvil-component type="Label" name="reports" prop:role='["badge", "badge-bad"]'></anvil-component>
+      <anvil-component type="Label" name="demo" prop:role='["badge"]' prop:text="Demo" bind:visible="self.item['demo']"></anvil-component>
+    </div>
+    <anvil-component type="Label" name="excerpt" prop:role='["ad-msg", "lyric-quote"]'></anvil-component>
+    <div class="ui-row">
+      <anvil-component type="CheckBox" name="featured_box" prop:text="Staff pick" bind:checked="self.item['featured']"></anvil-component>
+      <anvil-component type="CheckBox" name="hidden_box" prop:text="Hidden" bind:checked="self.item['hidden']"></anvil-component>
+      <span class="ui-spacer"></span>
+      <anvil-component type="Button" name="delete_button" prop:text="Delete" prop:role='["btn", "btn-sm", "btn-danger", "ic-trash"]'></anvil-component>
+    </div>
+  </div>
+</div>

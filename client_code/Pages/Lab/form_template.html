@@ -1,0 +1,32 @@
+<anvil-form layout="Yabanana.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <div class="ui-page-head">
+        <div><div class="eyebrow">Rhyme lab</div><h1>Find the word. Check the line.</h1>
+          <p class="muted">Rhymes from a 24,000-word pronouncing dictionary, plus hand-picked similes, metaphors and word palettes. No AI: just a very big rhyming dictionary.</p></div>
+      </div>
+      <div class="lb-grid">
+        <div class="lb-panel lb-helper">
+          <anvil-component type="Yabanana.Components.Helper" name="helper"></anvil-component>
+        </div>
+        <div class="lb-side">
+          <div class="lb-panel lb-check">
+            <h2 class="lb-h"><i class="ic ic-wave"></i>Line checker</h2>
+            <anvil-component type="TextArea" name="check_box" prop:placeholder="Paste or write a few lines…" prop:role='["lb-text"]'></anvil-component>
+            <div class="lb-legend">● stressed · ○ unstressed · ◌ unknown word · letters (A, B…) show the rhyme scheme · coloured words rhyme</div>
+            <div class="lb-out" anvil:dom-node="out"></div>
+          </div>
+          <div class="lb-panel lb-scratch">
+            <h2 class="lb-h"><i class="ic ic-pen"></i>Scratchpad</h2>
+            <anvil-component type="TextArea" name="scratch_box" prop:placeholder="Words you click on the left land here. Kept in this browser only." prop:role='["lb-text", "lb-scratch-text"]'></anvil-component>
+            <div class="ui-row lb-actions">
+              <anvil-component type="Button" name="copy_button" prop:text="Copy" prop:role='["btn", "btn-sm", "ic-copy"]'></anvil-component>
+              <anvil-component type="Button" name="clear_button" prop:text="Clear" prop:role='["btn", "btn-sm", "btn-ghost"]'></anvil-component>
+              <anvil-component type="Button" name="song_button" prop:text="Start a song with this" prop:role='["btn", "btn-sm", "btn-primary", "ic-pen"]'></anvil-component>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

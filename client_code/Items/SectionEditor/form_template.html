@@ -1,0 +1,12 @@
+<div class="sd-sec">
+  <div class="sd-sec-head">
+    <anvil-component type="DropDown" name="kind_box" prop:role='["sd-kind"]'></anvil-component>
+    <span class="grow"></span>
+    <anvil-component type="Button" name="up_button" prop:text="Move up" prop:role='["btn", "btn-ghost", "btn-icon", "ic-up"]'></anvil-component>
+    <anvil-component type="Button" name="down_button" prop:text="Move down" prop:role='["btn", "btn-ghost", "btn-icon", "ic-chevron"]'></anvil-component>
+    <anvil-component type="Button" name="dup_button" prop:text="Repeat this section" prop:role='["btn", "btn-ghost", "btn-icon", "ic-copy"]'></anvil-component>
+    <anvil-component type="Button" name="del_button" prop:text="Delete section" prop:role='["btn", "btn-ghost", "btn-icon", "ic-trash"]'></anvil-component>
+  </div>
+  <anvil-component type="TextArea" name="text_box" prop:role='["sd-text"]'></anvil-component>
+  <div class="sd-flow" anvil:dom-node="flow" aria-live="off"></div>
+</div>

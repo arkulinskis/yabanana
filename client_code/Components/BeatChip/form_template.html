@@ -1,0 +1,23 @@
+---
+custom_component: true
+properties:
+  - name: beat
+    type: string
+    default_value: boombap
+    description: The beat's key (boombap, trap, iambic ...)
+    default_binding_prop: true
+  - name: bpm
+    type: number
+    description: Tempo (empty = the beat's own)
+  - name: owner
+    type: string
+    default_value: ""
+    description: Tells two chips of the same beat apart (a card's chip vs the song page's), so only the pressed one lights up
+toolbox_item:
+  title: Beat chip
+  group: Yabanana
+help_text: |
+  The ▶ Boom Bap 90 pill that plays a beat. Drawn and played by the beat engine (theme/assets/yb-beats.js):
+  any [data-play-beat] button toggles the player, and every chip of the playing beat shows ■ while it plays.
+---
+<span class="yb-chip-host"></span>

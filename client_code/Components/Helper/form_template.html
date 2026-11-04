@@ -1,0 +1,21 @@
+---
+custom_component: true
+properties:
+  - name: scene
+    type: string
+    default_value: ""
+    description: The writer's scene (picks the first writing sparks)
+events:
+  - name: insert
+    description: A suggestion was clicked
+    parameters:
+      - name: text
+toolbox_item:
+  title: Writing helpers
+  group: Yabanana
+help_text: |
+  The helper panel: Rhymes (perfect, near, multis), Similes, Metaphors (+ the metaphor machine), Themes and Sparks,
+  all from the prepared dictionaries in theme/assets/yb-words.js (YB.helper). Raises "insert" with the clicked text.
+  set_word(w) shows rhymes for a word; show(tab, word) opens a tab.
+---
+<div class="yb-help-host"></div>

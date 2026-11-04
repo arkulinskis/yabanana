@@ -1,0 +1,18 @@
+<div class="ch-row">
+  <anvil-component type="Label" name="rank" prop:role='["ch-rank"]'></anvil-component>
+  <anvil-component type="Yabanana.Components.Avatar" name="avatar" bind:author="self.item['author']"></anvil-component>
+  <div class="ch-mid">
+    <h3><anvil-component type="Link" name="title_link" prop:role='["row-link"]' bind:text="self.item['title']"></anvil-component></h3>
+    <anvil-component type="Label" name="excerpt" prop:role='["ch-ex"]'></anvil-component>
+    <div class="meta">
+      <anvil-component type="Yabanana.Components.SceneBadge" name="badge" bind:scene="self.item['scene']"></anvil-component>
+      <span>by</span>
+      <anvil-component type="Link" name="writer_link" prop:role='["by-link"]'></anvil-component>
+      <span class="yb-count" anvil:name="reviews"><i class="ic ic-chat"></i><anvil-component type="Label" name="review_count" bind:text="str(self.item['review_count'])"></anvil-component></span>
+    </div>
+  </div>
+  <div class="score">
+    <anvil-component type="Yabanana.Components.Upvote" name="upvote" bind:song="self.item"></anvil-component>
+    <anvil-component type="Label" name="score" prop:role='["ch-score"]'></anvil-component>
+  </div>
+</div>

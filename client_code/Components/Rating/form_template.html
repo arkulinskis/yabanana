@@ -1,0 +1,27 @@
+---
+custom_component: true
+properties:
+  - name: value
+    type: number
+    default_value: 0
+    description: 0 (not rated yet) to 5 bananas
+    default_binding_prop: true
+  - name: label
+    type: string
+    default_value: Rating
+    description: What is rated (read out by screen readers)
+toolbox_item:
+  title: Banana rating
+  group: Yabanana
+help_text: |
+  Five banana buttons for a 1 to 5 rating (song reviews).
+---
+<div class="sg-stars-host">
+<div class="sg-stars" role="group" anvil:name="group" aria-label="Rating">
+  <button type="button" anvil:name="b1" data-v="1" aria-label="1 of 5" anvil:on-dom:click="self.pick_click"><i class="ic ic-banana"></i></button>
+  <button type="button" anvil:name="b2" data-v="2" aria-label="2 of 5" anvil:on-dom:click="self.pick_click"><i class="ic ic-banana"></i></button>
+  <button type="button" anvil:name="b3" data-v="3" aria-label="3 of 5" anvil:on-dom:click="self.pick_click"><i class="ic ic-banana"></i></button>
+  <button type="button" anvil:name="b4" data-v="4" aria-label="4 of 5" anvil:on-dom:click="self.pick_click"><i class="ic ic-banana"></i></button>
+  <button type="button" anvil:name="b5" data-v="5" aria-label="5 of 5" anvil:on-dom:click="self.pick_click"><i class="ic ic-banana"></i></button>
+</div>
+</div>

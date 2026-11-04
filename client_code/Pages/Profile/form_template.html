@@ -1,0 +1,51 @@
+<anvil-form layout="Yabanana.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap ui-narrow">
+      <div class="pf-head">
+        <anvil-component type="Label" name="initials" prop:role='["pf-avatar"]'></anvil-component>
+        <div>
+          <anvil-component type="Label" name="name_title" prop:role='["pf-title"]'></anvil-component>
+          <anvil-component type="Label" name="email_line" prop:role='["fine-print"]'></anvil-component>
+        </div>
+      </div>
+      <div class="pf-grid">
+        <div class="ui-card ui-stack">
+          <h2 class="pf-h">Your writer card</h2>
+          <label class="ui-field"><span>Pen name <em>(shown on your songs)</em></span>
+            <anvil-component type="TextBox" name="name_box"></anvil-component>
+          </label>
+          <div class="ui-field"><span>Your scene</span>
+            <anvil-component type="Yabanana.Components.ScenePicker" name="scene_pick" prop:all_label="All of them"></anvil-component>
+          </div>
+          <label class="ui-field"><span>Bio <em>(optional, 280 characters)</em></span>
+            <anvil-component type="TextArea" name="bio_box" prop:placeholder="Night-shift poet. Boom bap at breakfast." prop:height="90"></anvil-component>
+          </label>
+          <div class="ui-row">
+            <anvil-component type="Button" name="save_button" prop:text="Save" prop:role='["btn", "btn-primary"]'></anvil-component>
+            <a class="ui-btn ghost" href="#writer" anvil:name="page_link"><i class="ic ic-eye"></i>See your page</a>
+          </div>
+        </div>
+        <div class="ui-card ui-stack">
+          <h2 class="pf-h">Appearance</h2>
+          <p class="muted small">Follow your device, or pick one.</p>
+          <div class="ui-seg" role="group" aria-label="Appearance">
+            <button type="button" anvil:name="theme_auto" data-theme-pick="auto" anvil:on-dom:click="self.theme_click">Auto</button>
+            <button type="button" anvil:name="theme_light" data-theme-pick="light" anvil:on-dom:click="self.theme_click">Light</button>
+            <button type="button" anvil:name="theme_dark" data-theme-pick="dark" anvil:on-dom:click="self.theme_click">Dark</button>
+          </div>
+          <h2 class="pf-h pf-pw">Password</h2>
+          <p class="muted small">We'll email you a link to choose a new one.</p>
+          <anvil-component type="Button" name="reset_button" prop:text="Email me a reset link" prop:role='["btn", "ic-mail"]'></anvil-component>
+        </div>
+      </div>
+      <div class="ui-card pf-more">
+        <div class="pf-links">
+          <a href="#admin" anvil:name="admin_link"><i class="ic ic-shield"></i>Admin</a>
+          <button type="button" anvil:on-dom:click="self.feedback_click"><i class="ic ic-chat"></i>Submit feedback</button>
+          <button type="button" data-lk-open="overview"><i class="ic ic-lock"></i>Privacy &amp; Terms, and your data</button>
+          <button type="button" anvil:on-dom:click="self.sign_out_click"><i class="ic ic-logout"></i>Sign out</button>
+        </div>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

@@ -1,0 +1,26 @@
+<anvil-form layout="Yabanana.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <div class="ch-head">
+        <div><div class="eyebrow">Charts</div>
+          <anvil-component type="Label" name="title" prop:role='["ch-title"]'></anvil-component>
+          <anvil-component type="Label" name="sub" prop:role='["ch-sub"]'></anvil-component></div>
+      </div>
+      <div class="ch-tools">
+        <div class="ui-seg" role="group" aria-label="Period">
+          <button type="button" anvil:name="p_week" data-period="week" anvil:on-dom:click="self.period_click">This week</button>
+          <button type="button" anvil:name="p_all" data-period="all" anvil:on-dom:click="self.period_click">All time</button>
+          <button type="button" anvil:name="p_reviewed" data-period="reviewed" anvil:on-dom:click="self.period_click">Best reviewed</button>
+        </div>
+        <anvil-component type="Yabanana.Components.ScenePicker" name="scene_pick" prop:all_label="All"></anvil-component>
+      </div>
+      <anvil-component type="RepeatingPanel" name="chart_panel" prop:item_template="Yabanana.Items.ChartRow" prop:role='["ch-list"]'></anvil-component>
+      <div class="ui-empty" anvil:name="empty">
+        <i class="ic ic-trophy"></i>
+        <h2 class="empty-h">The chart is empty</h2>
+        <anvil-component type="Label" name="empty_text"></anvil-component>
+        <a class="ui-btn primary" href="#home"><i class="ic ic-shuffle"></i>Go to the Stage</a>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

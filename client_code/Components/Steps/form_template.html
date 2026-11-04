@@ -1,0 +1,16 @@
+---
+custom_component: true
+properties:
+  - name: beat
+    type: string
+    default_value: boombap
+    description: The beat whose step grid to show
+    default_binding_prop: true
+toolbox_item:
+  title: Beat steps
+  group: Yabanana
+help_text: |
+  The beat's step grid (one cell per step, strong beats outlined). It lights up in time while that beat plays
+  (theme/assets/yb-beats.js: YB.stepsHtml + YB.lightSteps).
+---
+<div class="yb-steps-host" aria-hidden="true"></div>

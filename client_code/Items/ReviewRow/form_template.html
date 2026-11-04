@@ -1,0 +1,13 @@
+<div class="sg-review">
+  <div class="top">
+    <anvil-component type="Yabanana.Components.Avatar" name="avatar" bind:author="self.item['author']"></anvil-component>
+    <div class="grow">
+      <b><anvil-component type="Link" name="writer_link" prop:role='["by-link"]'></anvil-component></b>
+      <anvil-component type="Label" name="when" prop:role='["fine-print"]'></anvil-component>
+    </div>
+    <anvil-component type="Button" name="delete_button" prop:text="Delete review" prop:role='["btn", "btn-ghost", "btn-icon", "ic-trash"]' bind:visible="self.item['can_delete']"></anvil-component>
+  </div>
+  <anvil-component type="Label" name="scores" prop:role='["sg-rs"]'></anvil-component>
+  <anvil-component type="Label" name="text" prop:role='["sg-txt"]' bind:text="self.item['text']"></anvil-component>
+  <anvil-component type="Label" name="fav" prop:role='["sg-fav"]' bind:visible="bool(self.item['fav_line'])"></anvil-component>
+</div>
