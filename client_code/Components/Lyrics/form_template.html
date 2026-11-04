@@ -1,0 +1,23 @@
+---
+custom_component: true
+properties:
+  - name: sections
+    type: object
+    description: 'The song''s sections: [{kind, text}]'
+    default_binding_prop: true
+  - name: scheme
+    type: boolean
+    default_value: true
+    description: Show the rhyme map (scheme letters + coloured rhyming words)
+  - name: fav
+    type: string
+    default_value: ""
+    description: A line to highlight (a review's favourite line)
+toolbox_item:
+  title: Lyrics
+  group: Yabanana
+help_text: |
+  A song's lyrics, section by section, with the Rhyme map: A/B scheme letters and colour-coded rhyming words
+  (theme/assets/yb-shared.js YB.lyricsHtml, using the rhyme dictionary in yb-words.js).
+---
+<div class="yb-lyrics-host"></div>

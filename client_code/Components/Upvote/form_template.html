@@ -1,0 +1,21 @@
+---
+custom_component: true
+properties:
+  - name: song
+    type: object
+    description: 'The song dict from the server: {id, upvotes, upvoted, mine}'
+    default_binding_prop: true
+  - name: big
+    type: boolean
+    default_value: false
+    description: The larger button (song page)
+toolbox_item:
+  title: Upvote (banana)
+  group: Yabanana
+help_text: |
+  The banana button. Members toggle their upvote (the song is saved to / removed from their Bunch); visitors get the
+  "Join the bunch" nudge. Every banana button for the same song updates together (yb.on_upvote).
+---
+<span class="yb-up-host">
+  <anvil-component type="Button" name="btn" prop:text="0" prop:role='["yb-up", "ic-banana"]'></anvil-component>
+</span>

@@ -1,0 +1,18 @@
+<div class="sd-song">
+  <anvil-component type="Yabanana.Components.Avatar" name="avatar"></anvil-component>
+  <div class="sd-song-mid">
+    <h3><anvil-component type="Link" name="title_link" prop:role='["row-link"]' bind:text="self.item['title']"></anvil-component></h3>
+    <div class="meta">
+      <anvil-component type="Yabanana.Components.SceneBadge" name="badge" bind:scene="self.item['scene']"></anvil-component>
+      <anvil-component type="Label" name="status" prop:role='["badge"]'></anvil-component>
+      <anvil-component type="Label" name="hidden" prop:role='["badge", "badge-bad"]' prop:text="Hidden" bind:visible="self.item['hidden']"></anvil-component>
+      <anvil-component type="Label" name="lines"></anvil-component>
+      <anvil-component type="Label" name="edited"></anvil-component>
+      <span class="yb-count" anvil:name="counts"><i class="ic ic-banana"></i><anvil-component type="Label" name="upvotes" bind:text="str(self.item['upvotes'])"></anvil-component><i class="ic ic-chat"></i><anvil-component type="Label" name="reviews" bind:text="str(self.item['review_count'])"></anvil-component></span>
+    </div>
+  </div>
+  <div class="acts">
+    <anvil-component type="Link" name="write_link" prop:text="Write" prop:role='["btn", "btn-sm", "btn-primary", "ic-pen"]'></anvil-component>
+    <anvil-component type="Link" name="view_link" prop:text="View" prop:role='["btn", "btn-sm", "ic-eye"]'></anvil-component>
+  </div>
+</div>

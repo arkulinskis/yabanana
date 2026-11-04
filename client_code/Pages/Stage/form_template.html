@@ -1,0 +1,53 @@
+<anvil-form layout="Yabanana.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <div class="st-hero">
+        <div>
+          <div class="eyebrow">The Stage</div>
+          <h1 class="st-title"><anvil-component type="Label" name="hello" prop:role='["inline"]'></anvil-component> <span class="hl"><anvil-component type="Label" name="greet" prop:role='["inline"]'></anvil-component></span></h1>
+          <anvil-component type="Label" name="lead" prop:role='["st-lead"]'></anvil-component>
+        </div>
+        <a class="ui-btn primary lg" href="#studio/new" anvil:name="start_link"><i class="ic ic-pen"></i>Start a song</a>
+        <a class="ui-btn primary lg" href="#auth/signup" anvil:name="join_link"><i class="ic ic-banana"></i>Join the bunch</a>
+      </div>
+
+      <div class="st-cta" anvil:name="guest_band">
+        <div><h2 class="st-cta-h">Twelve beats. Twenty-four thousand rhymes. Zero blank-page panic.</h2>
+          <p>Write over boom bap, four-on-the-floor or iambic pentameter, with rhymes, similes and metaphors on tap.</p></div>
+        <a class="ui-btn" href="#landing">How it works <i class="ic ic-arrow"></i></a>
+      </div>
+
+      <div class="st-filter">
+        <anvil-component type="Yabanana.Components.ScenePicker" name="scene_pick" prop:all_label="All scenes"></anvil-component>
+        <anvil-component type="Button" name="shuffle_button" prop:text="Shuffle" prop:role='["btn", "ic-shuffle"]'></anvil-component>
+      </div>
+
+      <anvil-component type="RepeatingPanel" name="songs_panel" prop:item_template="Yabanana.Items.SongCard" prop:role='["yb-cards", "st-shuffle"]'></anvil-component>
+      <div class="ui-empty" anvil:name="empty">
+        <i class="ic ic-mic"></i>
+        <anvil-component type="Label" name="empty_title" prop:role='["empty-title"]'></anvil-component>
+        <p>Be the first on stage.</p>
+        <a class="ui-btn primary" href="#studio/new" anvil:name="empty_write"><i class="ic ic-pen"></i>Write one</a>
+        <a class="ui-btn primary" href="#auth/signup" anvil:name="empty_join">Join and write one</a>
+      </div>
+
+      <section class="st-sec" anvil:name="spot_part">
+        <div class="st-sec-head"><div><h2><i class="ic ic-flame"></i>Spotlight</h2>
+          <anvil-component type="Label" name="spot_text" prop:role='["st-sec-p"]'></anvil-component></div></div>
+        <anvil-component type="RepeatingPanel" name="spot_panel" prop:item_template="Yabanana.Items.SongCard" prop:role='["st-rail"]'></anvil-component>
+      </section>
+
+      <section class="st-sec" anvil:name="fresh_part">
+        <div class="st-sec-head"><div><h2><i class="ic ic-sparkle"></i>Fresh drops</h2><p>The newest songs on the stage.</p></div>
+          <a class="ui-btn sm" href="#charts"><i class="ic ic-trophy"></i>See the charts</a></div>
+        <anvil-component type="RepeatingPanel" name="fresh_panel" prop:item_template="Yabanana.Items.FreshRow" prop:role='["st-fresh"]'></anvil-component>
+      </section>
+
+      <div class="st-stats">
+        <div class="st-stat"><anvil-component type="Label" name="n_songs" prop:role='["st-num"]'></anvil-component><span>songs on stage</span></div>
+        <div class="st-stat"><anvil-component type="Label" name="n_writers" prop:role='["st-num"]'></anvil-component><span>writers</span></div>
+        <div class="st-stat"><anvil-component type="Label" name="n_upvotes" prop:role='["st-num"]'></anvil-component><span>bananas given</span></div>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

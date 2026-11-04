@@ -1,0 +1,29 @@
+---
+custom_component: true
+properties:
+  - name: value
+    type: string
+    default_value: ""
+    description: The chosen scene ("" = all)
+    default_binding_prop: true
+  - name: all_label
+    type: string
+    default_value: All scenes
+    description: The caption of the "every scene" button
+events:
+  - name: change
+    description: Someone picked a scene
+    parameters:
+      - name: value
+toolbox_item:
+  title: Scene picker
+  group: Yabanana
+help_text: |
+  All / Rap / Poetry / Pop toggle buttons in the scene colours (Stage, Charts, Bunch, Profile).
+---
+<div class="yb-scenes-pick" role="group" aria-label="Scene">
+  <button type="button" anvil:name="s_all" data-scene="" anvil:on-dom:click="self.pick_click"><span anvil:dom-node="all_text">All scenes</span></button>
+  <button type="button" anvil:name="s_rap" data-scene="rap" class="sc-rap" anvil:on-dom:click="self.pick_click">Rap</button>
+  <button type="button" anvil:name="s_poetry" data-scene="poetry" class="sc-poetry" anvil:on-dom:click="self.pick_click">Poetry</button>
+  <button type="button" anvil:name="s_pop" data-scene="pop" class="sc-pop" anvil:on-dom:click="self.pick_click">Pop</button>
+</div>

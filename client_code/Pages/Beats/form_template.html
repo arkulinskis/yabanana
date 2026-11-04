@@ -1,0 +1,51 @@
+<anvil-form layout="Yabanana.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <div class="bt-intro">
+        <div class="eyebrow">Beats &amp; theory</div>
+        <h1>Twelve beats, three traditions</h1>
+        <p class="muted bt-lead">Every beat here is built from a rule of song or poetry: a drum pattern from hip-hop, a chord progression from pop, a metrical foot from poetry. Each one tells you how many syllables fit a line. Tap ▶ to hear it, then write over it in the Studio.</p>
+        <a class="ui-btn primary" href="#studio/new" anvil:name="write_link"><i class="ic ic-pen"></i>Write over a beat</a>
+        <a class="ui-btn primary" href="#auth/signup" anvil:name="join_link"><i class="ic ic-pen"></i>Join to write over them</a>
+      </div>
+      <section class="bt-scene">
+        <div class="bt-scene-head"><span class="yb-scene sc-rap">Rap</span><h2>Rap: drums first</h2></div>
+        <anvil-component type="RepeatingPanel" name="rap_panel" prop:item_template="Yabanana.Items.BeatCard" prop:role='["bt-grid"]'></anvil-component>
+      </section>
+      <section class="bt-scene">
+        <div class="bt-scene-head"><span class="yb-scene sc-pop">Pop</span><h2>Pop: chords and hooks</h2></div>
+        <anvil-component type="RepeatingPanel" name="pop_panel" prop:item_template="Yabanana.Items.BeatCard" prop:role='["bt-grid"]'></anvil-component>
+      </section>
+      <section class="bt-scene">
+        <div class="bt-scene-head"><span class="yb-scene sc-poetry">Poetry</span><h2>Poetry: meter as a beat</h2></div>
+        <anvil-component type="RepeatingPanel" name="poetry_panel" prop:item_template="Yabanana.Items.BeatCard" prop:role='["bt-grid"]'></anvil-component>
+      </section>
+      <section class="bt-scene">
+        <div class="bt-scene-head"><h2>Craft cheat sheet</h2></div>
+        <div class="bt-craft">
+          <div class="ui-card sc-rap"><div class="bt-craft-badge"><span class="yb-scene sc-rap">Rap</span></div><dl>
+            <dt>Multisyllabic rhyme</dt><dd>Rhyme two or three syllables at once: <i>broken heart / open art</i>. The Rhyme lab's "multis" find them.</dd>
+            <dt>Internal rhyme</dt><dd>Rhymes inside the line, not just at the end: <i>stack the facts, back to back</i>.</dd>
+            <dt>Punchline</dt><dd>Set up an image, then flip it in the last two words, landing on the snare.</dd>
+            <dt>Flow switch</dt><dd>Change rhythm mid-verse: from 8th notes to triplets, or start lines off the beat.</dd>
+            <dt>The pocket</dt><dd>Where your syllables sit against the drums. Aim the last stressed syllable at the snare on 4.</dd>
+          </dl></div>
+          <div class="ui-card sc-poetry"><div class="bt-craft-badge"><span class="yb-scene sc-poetry">Poetry</span></div><dl>
+            <dt>Meter</dt><dd>The pattern of stressed (●) and unstressed (○) syllables. Iambs ○●, trochees ●○, anapests ○○●, dactyls ●○○.</dd>
+            <dt>Enjambment</dt><dd>Let a sentence run over the line break so the reader leans into the next line.</dd>
+            <dt>Caesura</dt><dd>A pause in the middle of a line (a comma, a dash): <i>I hold the hands — of strangers</i>.</dd>
+            <dt>The volta</dt><dd>The turn: the place a poem changes its mind. Sonnets often turn at line 9.</dd>
+            <dt>Slant rhyme</dt><dd>Rhymes that almost match: <i>rain / same, saucer / daughter</i>. Quieter than perfect rhyme.</dd>
+          </dl></div>
+          <div class="ui-card sc-pop"><div class="bt-craft-badge"><span class="yb-scene sc-pop">Pop</span></div><dl>
+            <dt>The hook</dt><dd>The line people sing back. Short, repeated, usually the title.</dd>
+            <dt>Pre-chorus lift</dt><dd>Shorter lines and rising tension right before the chorus "opens up".</dd>
+            <dt>Prosody</dt><dd>Put stressed syllables on strong beats, and the emotional word on the longest note.</dd>
+            <dt>Open vowels</dt><dd><i>Ooh, ay, oh, ah</i> are easy to hold and belt. Save them for long notes.</dd>
+            <dt>Contrast</dt><dd>Verse low and wordy, chorus high and simple. The change is what feels big.</dd>
+          </dl></div>
+        </div>
+      </section>
+    </div>
+  </anvil-block>
+</anvil-form>

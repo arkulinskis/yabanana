@@ -1,0 +1,25 @@
+---
+custom_component: true
+properties:
+  - name: author
+    type: object
+    description: '{id, name, scene}: the writer (no id = not a link)'
+    default_binding_prop: true
+  - name: big
+    type: boolean
+    default_value: false
+    description: The large square (writer page)
+toolbox_item:
+  title: Writer avatar
+  group: Yabanana
+help_text: |
+  A writer's initials on their scene colour (rap gold, poetry blue, pop pink). Links to their writer page.
+---
+<span class="yb-avatar-host">
+  <a class="yb-avatar" anvil:name="link" href="#home">
+    <anvil-component type="Label" name="link_letters" prop:role='["initials"]'></anvil-component>
+  </a>
+  <span class="yb-avatar" anvil:name="plain">
+    <anvil-component type="Label" name="plain_letters" prop:role='["initials"]'></anvil-component>
+  </span>
+</span>

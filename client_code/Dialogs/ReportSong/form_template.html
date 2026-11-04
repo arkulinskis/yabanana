@@ -1,0 +1,22 @@
+<div class="ui yb-report">
+  <h2 class="dlg-h">Report this song</h2>
+  <p class="muted">Admins review every report. Songs reported by several people are hidden until then.</p>
+  <div class="ui-stack">
+    <fieldset class="yb-reasons">
+      <legend class="ui-sr">Why are you reporting it?</legend>
+      <anvil-component type="RadioButton" name="r_spam" prop:text="Spam or advertising" prop:group_name="reason" prop:value="spam" prop:selected="true"></anvil-component>
+      <anvil-component type="RadioButton" name="r_hate" prop:text="Hateful or harassing" prop:group_name="reason" prop:value="hate"></anvil-component>
+      <anvil-component type="RadioButton" name="r_copied" prop:text="Copied from someone else" prop:group_name="reason" prop:value="copied"></anvil-component>
+      <anvil-component type="RadioButton" name="r_explicit" prop:text="Sexual or graphic content" prop:group_name="reason" prop:value="explicit"></anvil-component>
+      <anvil-component type="RadioButton" name="r_other" prop:text="Something else" prop:group_name="reason" prop:value="other"></anvil-component>
+    </fieldset>
+    <label class="ui-field"><span>Anything to add? <em>(optional)</em></span>
+      <anvil-component type="TextArea" name="note_box" prop:height="80"></anvil-component>
+    </label>
+    <anvil-component type="Label" name="message" prop:role='["msg-error"]' prop:visible="false"></anvil-component>
+    <div class="ui-row end">
+      <anvil-component type="Button" name="cancel_button" prop:text="Cancel" prop:role='["btn", "btn-ghost"]'></anvil-component>
+      <anvil-component type="Button" name="send_button" prop:text="Send report" prop:role='["btn", "btn-danger", "btn-solid", "ic-flag"]'></anvil-component>
+    </div>
+  </div>
+</div>

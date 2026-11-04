@@ -1,0 +1,19 @@
+<div class="bt-card">
+  <div class="top">
+    <button type="button" class="play" anvil:name="play_button"><span class="pb"><i class="ic ic-play"></i></span></button>
+    <div class="bt-name">
+      <h3><anvil-component type="Label" name="name" prop:role='["bt-title"]' bind:text="self.item['name']"></anvil-component></h3>
+      <anvil-component type="Label" name="feel" prop:role='["bt-feel"]' bind:text="self.item['feel']"></anvil-component>
+    </div>
+  </div>
+  <anvil-component type="Yabanana.Components.Steps" name="steps" bind:beat="self.item['key']"></anvil-component>
+  <anvil-component type="Label" name="meter" prop:role='["bt-meter"]' bind:text="self.item['meter']"></anvil-component>
+  <div class="facts">
+    <anvil-component type="Label" name="bpm" prop:role='["badge"]'></anvil-component>
+    <anvil-component type="Label" name="per_bar" prop:role='["badge"]'></anvil-component>
+    <anvil-component type="Label" name="syllables" prop:role='["badge", "badge-brand"]'></anvil-component>
+    <anvil-component type="Label" name="bars" prop:role='["badge"]'></anvil-component>
+  </div>
+  <anvil-component type="Label" name="theory" prop:role='["bt-theory"]' bind:text="self.item['theory']"></anvil-component>
+  <anvil-component type="Label" name="try_line" prop:role='["bt-try"]' bind:text="self.item['tryLine']"></anvil-component>
+</div>

@@ -1,0 +1,13 @@
+<div class="ui yb-beatpick">
+  <h2 class="dlg-h">Pick a beat</h2>
+  <p class="muted">Every beat works with every scene. Tap ▶ to preview.</p>
+  <h3 class="bp-scene"><anvil-component type="Yabanana.Components.SceneBadge" name="rap_badge" prop:scene="rap"></anvil-component></h3>
+  <anvil-component type="RepeatingPanel" name="rap_panel" prop:item_template="Yabanana.Items.BeatOption" prop:role='["bp-list"]'></anvil-component>
+  <h3 class="bp-scene"><anvil-component type="Yabanana.Components.SceneBadge" name="pop_badge" prop:scene="pop"></anvil-component></h3>
+  <anvil-component type="RepeatingPanel" name="pop_panel" prop:item_template="Yabanana.Items.BeatOption" prop:role='["bp-list"]'></anvil-component>
+  <h3 class="bp-scene"><anvil-component type="Yabanana.Components.SceneBadge" name="poetry_badge" prop:scene="poetry"></anvil-component></h3>
+  <anvil-component type="RepeatingPanel" name="poetry_panel" prop:item_template="Yabanana.Items.BeatOption" prop:role='["bp-list"]'></anvil-component>
+  <div class="ui-row end">
+    <anvil-component type="Button" name="close_button" prop:text="Close" prop:role='["btn", "btn-ghost"]'></anvil-component>
+  </div>
+</div>

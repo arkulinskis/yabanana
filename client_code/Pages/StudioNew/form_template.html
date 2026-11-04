@@ -1,0 +1,28 @@
+<anvil-form layout="Yabanana.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <div class="ui-page-head">
+        <div><div class="eyebrow">New song</div><h1>What are we writing?</h1>
+          <p class="muted">Pick a scene: it sets the starting beat and sections. You can change everything later.</p></div>
+      </div>
+      <div class="sd-pick">
+        <button type="button" class="sc-rap" data-new="rap" anvil:name="pick_rap" anvil:on-dom:click="self.pick_click">
+          <span class="yb-scene sc-rap">Rap</span><b>Bars</b>
+          <span class="muted">Flow, punchlines, multis. Starts on <strong>Boom Bap</strong>.</span>
+          <em>Fourth floor walk-up, radiator banging out a backbeat</em>
+        </button>
+        <button type="button" class="sc-poetry" data-new="poetry" anvil:name="pick_poetry" anvil:on-dom:click="self.pick_click">
+          <span class="yb-scene sc-poetry">Poetry</span><b>Lines</b>
+          <span class="muted">Meter, images, the turn. Starts on <strong>Iambic Heartbeat</strong>.</span>
+          <em>I hold the hands of strangers until dawn</em>
+        </button>
+        <button type="button" class="sc-pop" data-new="pop" anvil:name="pick_pop" anvil:on-dom:click="self.pick_click">
+          <span class="yb-scene sc-pop">Pop</span><b>Hooks</b>
+          <span class="muted">Hooks, choruses, singability. Starts on <strong>Four on the Floor</strong>.</span>
+          <em>There's glitter in the gutter, there's a bassline in the rain</em>
+        </button>
+      </div>
+      <p class="muted small sd-tip"><i class="ic ic-bulb"></i> Tip: the <a href="#lab">Rhyme lab</a> and <a href="#beats">Beats &amp; theory</a> pages are open to everyone if you want to warm up first.</p>
+    </div>
+  </anvil-block>
+</anvil-form>

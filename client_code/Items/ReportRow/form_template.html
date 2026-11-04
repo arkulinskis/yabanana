@@ -1,0 +1,21 @@
+<div class="ui-item ad-report">
+  <div class="grow">
+    <div class="meta">
+      <anvil-component type="Label" name="reason" prop:role='["badge", "badge-bad"]' bind:text="self.item['reason_label']"></anvil-component>
+      <anvil-component type="Label" name="who" prop:role='["strong"]' bind:text="self.item['by']"></anvil-component>
+      <anvil-component type="Label" name="when"></anvil-component>
+      <anvil-component type="Label" name="hidden" prop:role='["badge", "badge-warn"]' prop:text="Song hidden"></anvil-component>
+    </div>
+    <div class="ad-msg" anvil:name="song_part">
+      <b><anvil-component type="Link" name="title_link" prop:role='["row-link"]'></anvil-component></b>
+      <anvil-component type="Label" name="by" prop:role='["inline"]'></anvil-component>
+    </div>
+    <anvil-component type="Label" name="excerpt" prop:role='["ad-msg", "lyric-quote"]'></anvil-component>
+    <anvil-component type="Label" name="gone" prop:role='["ad-msg", "fine-print"]' prop:text="The song was deleted."></anvil-component>
+    <anvil-component type="Label" name="note" prop:role='["ad-msg"]'></anvil-component>
+    <div class="ui-row" anvil:name="actions">
+      <anvil-component type="Button" name="fine_button" prop:text="It's fine (unhide)" prop:role='["btn", "btn-sm", "ic-check"]'></anvil-component>
+      <anvil-component type="Button" name="hide_button" prop:text="Hide the song" prop:role='["btn", "btn-sm", "btn-danger", "ic-eye"]'></anvil-component>
+    </div>
+  </div>
+</div>

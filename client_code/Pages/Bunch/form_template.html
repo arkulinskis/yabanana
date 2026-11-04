@@ -1,0 +1,22 @@
+<anvil-form layout="Yabanana.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <div class="bn-hero">
+        <div class="big" aria-hidden="true"><i class="ic ic-banana"></i></div>
+        <div><div class="eyebrow">Your Bunch</div><h1>Songs you upvoted</h1>
+          <p><anvil-component type="Label" name="count" prop:role='["inline"]'></anvil-component> saved. Tap a banana again to remove one.</p></div>
+      </div>
+      <div class="bn-tools" anvil:name="tools">
+        <anvil-component type="TextBox" name="search_box" prop:type="search" prop:placeholder="Search your Bunch" prop:role='["bn-search"]'></anvil-component>
+        <anvil-component type="Yabanana.Components.ScenePicker" name="scene_pick" prop:all_label="All"></anvil-component>
+      </div>
+      <anvil-component type="RepeatingPanel" name="songs_panel" prop:item_template="Yabanana.Items.SongCard" prop:role='["yb-cards"]'></anvil-component>
+      <div class="ui-empty" anvil:name="empty">
+        <i class="ic ic-banana"></i>
+        <anvil-component type="Label" name="empty_title" prop:role='["empty-title"]'></anvil-component>
+        <anvil-component type="Label" name="empty_text"></anvil-component>
+        <a class="ui-btn primary" href="#home" anvil:name="empty_link"><i class="ic ic-shuffle"></i>Go to the Stage</a>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

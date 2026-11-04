@@ -1,0 +1,77 @@
+<anvil-form layout="Yabanana.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <div class="ui-empty" anvil:name="missing">
+        <i class="ic ic-lock"></i>
+        <h1 class="empty-h1">You can't edit this song</h1>
+        <anvil-component type="Label" name="missing_text"></anvil-component>
+        <a class="ui-btn primary" href="#studio"><i class="ic ic-back"></i>Your notebook</a>
+      </div>
+      <div anvil:name="desk">
+        <div class="sd-bar">
+          <a class="ui-btn ghost sm" href="#studio"><i class="ic ic-back"></i>Notebook</a>
+          <span class="sd-save" anvil:name="save_box"><i class="ic ic-check" anvil:name="save_icon"></i><anvil-component type="Label" name="save_text" prop:role='["inline"]' prop:text="Saved"></anvil-component></span>
+          <span class="grow"></span>
+          <a class="ui-badge good" href="#home" anvil:name="on_stage"><i class="ic ic-eye"></i>On stage</a>
+          <span class="ui-badge" anvil:name="draft_badge"><i class="ic ic-lock"></i>Draft</span>
+          <anvil-component type="Button" name="perform_button" prop:text="Perform" prop:role='["btn", "ic-mic"]'></anvil-component>
+          <anvil-component type="Button" name="publish_button" prop:text="Share to the stage" prop:role='["btn", "btn-primary", "ic-banana"]'></anvil-component>
+          <anvil-component type="Button" name="delete_button" prop:text="Delete song" prop:role='["btn", "btn-ghost", "btn-icon", "ic-trash"]'></anvil-component>
+        </div>
+        <anvil-component type="TextBox" name="title_box" prop:placeholder="Untitled" prop:role='["sd-title"]'></anvil-component>
+        <p class="small muted sd-remix" anvil:name="remix_part">Remix of <anvil-component type="Link" name="remix_link" prop:role='["by-link"]'></anvil-component> <anvil-component type="Label" name="remix_by" prop:role='["inline"]'></anvil-component></p>
+
+        <div class="sd-ctl">
+          <div class="grp"><span class="lbl">Scene</span>
+            <div class="ui-seg" role="group" aria-label="Scene">
+              <button type="button" anvil:name="sc_rap" data-v="rap" anvil:on-dom:click="self.scene_click">Rap</button>
+              <button type="button" anvil:name="sc_poetry" data-v="poetry" anvil:on-dom:click="self.scene_click">Poetry</button>
+              <button type="button" anvil:name="sc_pop" data-v="pop" anvil:on-dom:click="self.scene_click">Pop</button>
+            </div>
+          </div>
+          <div class="grp"><span class="lbl">Mood</span><anvil-component type="DropDown" name="mood_box" prop:role='["sd-select"]'></anvil-component></div>
+          <div class="grp"><span class="lbl">Beat</span>
+            <anvil-component type="Button" name="beat_button" prop:role='["btn", "btn-sm", "ic-wave"]'></anvil-component>
+            <anvil-component type="Button" name="play_button" prop:text="Play the beat" prop:role='["btn", "btn-sm", "btn-icon", "ic-play"]'></anvil-component>
+          </div>
+          <div class="grp"><span class="lbl">Tempo</span>
+            <input type="range" min="50" max="180" step="1" value="90" aria-label="Tempo" anvil:dom-node="bpm">
+            <anvil-component type="Label" name="bpm_value" prop:role='["strong"]'></anvil-component>
+          </div>
+          <div class="grp"><span class="lbl">Bars/line</span>
+            <div class="ui-seg" role="group" aria-label="Bars per line">
+              <button type="button" anvil:name="bpl_half" data-v="0.5" aria-label="Half a bar" anvil:on-dom:click="self.bpl_click">½</button>
+              <button type="button" anvil:name="bpl_one" data-v="1" aria-label="One bar" anvil:on-dom:click="self.bpl_click">1</button>
+              <button type="button" anvil:name="bpl_two" data-v="2" aria-label="Two bars" anvil:on-dom:click="self.bpl_click">2</button>
+            </div>
+          </div>
+          <anvil-component type="Yabanana.Components.Steps" name="steps"></anvil-component>
+        </div>
+
+        <div class="sd-grid">
+          <div class="sd-desk">
+            <anvil-component type="RepeatingPanel" name="sections_panel" prop:item_template="Yabanana.Items.SectionEditor" prop:role='["sd-secs"]'></anvil-component>
+            <div class="sd-add">
+              <anvil-component type="Button" name="add_verse" prop:text="Verse" prop:role='["btn", "btn-sm", "ic-plus"]'></anvil-component>
+              <anvil-component type="Button" name="add_chorus" prop:text="Chorus" prop:role='["btn", "btn-sm", "ic-plus"]'></anvil-component>
+              <anvil-component type="Button" name="add_hook" prop:text="Hook" prop:role='["btn", "btn-sm", "ic-plus"]'></anvil-component>
+              <anvil-component type="Button" name="add_bridge" prop:text="Bridge" prop:role='["btn", "btn-sm", "ic-plus"]'></anvil-component>
+              <anvil-component type="Button" name="add_stanza" prop:text="Stanza" prop:role='["btn", "btn-sm", "ic-plus"]'></anvil-component>
+            </div>
+            <details class="ui-card sd-preview" anvil:dom-node="preview_box">
+              <summary>Rhyme map preview</summary>
+              <div class="sd-preview-in"><anvil-component type="Yabanana.Components.Lyrics" name="preview"></anvil-component></div>
+            </details>
+          </div>
+          <aside class="sd-help" anvil:name="help_wrap" aria-label="Writing helpers">
+            <div class="sd-help-head"><b>Writing helpers</b>
+              <anvil-component type="Button" name="help_close" prop:text="Close" prop:role='["btn", "btn-ghost", "btn-icon", "ic-x"]'></anvil-component>
+            </div>
+            <anvil-component type="Yabanana.Components.Helper" name="helper"></anvil-component>
+          </aside>
+        </div>
+        <anvil-component type="Button" name="help_open" prop:text="Helpers" prop:role='["btn", "btn-primary", "ic-book", "sd-fab"]'></anvil-component>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

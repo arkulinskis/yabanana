@@ -1,0 +1,104 @@
+<anvil-form layout="Yabanana.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <div class="ui-empty" anvil:name="missing">
+        <i class="ic ic-mic"></i>
+        <h1 class="empty-h1">This song isn't here</h1>
+        <anvil-component type="Label" name="missing_text"></anvil-component>
+        <a class="ui-btn primary" href="#home"><i class="ic ic-shuffle"></i>Go to the Stage</a>
+      </div>
+      <div class="sg-grid" anvil:name="grid">
+        <div class="sg-main">
+          <div class="sg-head">
+            <div class="ui-note sg-notice" anvil:name="draft_note"><i class="ic ic-lock"></i> This is a draft: only you can see it.</div>
+            <div class="ui-error sg-notice" anvil:name="hidden_note">This song is hidden from the stage while an admin reviews it.</div>
+            <div class="ui-row">
+              <anvil-component type="Yabanana.Components.SceneBadge" name="badge"></anvil-component>
+              <anvil-component type="Label" name="mood" prop:role='["badge"]'></anvil-component>
+              <span class="ui-badge brand" anvil:name="staff_pick"><i class="ic ic-star"></i>Staff pick</span>
+              <span class="ui-badge accent" anvil:name="boosted"><i class="ic ic-flame"></i><anvil-component type="Label" name="boosted_text" prop:role='["inline"]'></anvil-component></span>
+            </div>
+            <anvil-component type="Label" name="title" prop:role='["sg-title"]'></anvil-component>
+            <div class="sg-by">
+              <anvil-component type="Yabanana.Components.Avatar" name="avatar"></anvil-component>
+              <div>
+                <b><anvil-component type="Link" name="writer_link" prop:role='["by-link"]'></anvil-component></b>
+                <div class="muted sg-when">
+                  <anvil-component type="Label" name="when" prop:role='["inline"]'></anvil-component>
+                  <span anvil:name="remix_part"> · remix of <anvil-component type="Link" name="remix_link" prop:role='["by-link"]'></anvil-component> <anvil-component type="Label" name="remix_by" prop:role='["inline"]'></anvil-component></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sg-actions">
+            <anvil-component type="Button" name="perform_button" prop:text="Perform" prop:role='["btn", "btn-primary", "btn-lg", "ic-mic"]'></anvil-component>
+            <anvil-component type="Yabanana.Components.Upvote" name="upvote" prop:big="true"></anvil-component>
+            <anvil-component type="Link" name="edit_link" prop:text="Edit" prop:role='["btn", "ic-pen"]'></anvil-component>
+            <anvil-component type="Button" name="promote_button" prop:text="Promote" prop:tooltip="Puts it in the Spotlight for 7 days" prop:role='["btn", "ic-flame"]'></anvil-component>
+            <span class="ui-badge accent" anvil:name="promoted"><i class="ic ic-flame"></i>You promoted this</span>
+            <anvil-component type="Button" name="remix_button" prop:text="Remix" prop:role='["btn", "ic-remix"]'></anvil-component>
+            <anvil-component type="Button" name="share_button" prop:text="Share" prop:role='["btn", "btn-ghost", "ic-share"]'></anvil-component>
+            <anvil-component type="Button" name="report_button" prop:text="Report" prop:tooltip="Report" prop:role='["btn", "btn-ghost", "ic-flag"]'></anvil-component>
+            <anvil-component type="Button" name="admin_delete_button" prop:text="Delete" prop:role='["btn", "btn-ghost", "btn-danger", "ic-trash"]'></anvil-component>
+          </div>
+
+          <div class="sg-paper">
+            <div class="sg-paper-top">
+              <anvil-component type="Yabanana.Components.BeatChip" name="chip" prop:owner="song"></anvil-component>
+              <anvil-component type="CheckBox" name="scheme_box" prop:text="Rhyme map" prop:role='["small-check"]'></anvil-component>
+            </div>
+            <anvil-component type="Yabanana.Components.Lyrics" name="lyrics"></anvil-component>
+          </div>
+
+          <section class="sg-reviews">
+            <h2 class="sg-rev-h">Reviews <anvil-component type="Label" name="review_n" prop:role='["inline", "sg-rev-n"]'></anvil-component></h2>
+            <div class="ui-card sg-form" anvil:name="form_part">
+              <anvil-component type="Label" name="form_title" prop:role='["sg-form-title"]'></anvil-component>
+              <div class="sg-rate"><anvil-component type="Label" name="c1" prop:role='["sg-lbl"]'></anvil-component><anvil-component type="Yabanana.Components.Rating" name="rate1"></anvil-component></div>
+              <div class="sg-rate"><anvil-component type="Label" name="c2" prop:role='["sg-lbl"]'></anvil-component><anvil-component type="Yabanana.Components.Rating" name="rate2"></anvil-component></div>
+              <div class="sg-rate"><anvil-component type="Label" name="c3" prop:role='["sg-lbl"]'></anvil-component><anvil-component type="Yabanana.Components.Rating" name="rate3"></anvil-component></div>
+              <label class="ui-field"><span>What worked? What would you change?</span>
+                <anvil-component type="TextArea" name="review_box" prop:placeholder="Be specific and kind: name a line, an image, a rhyme." prop:height="110"></anvil-component>
+              </label>
+              <label class="ui-field"><span>Favourite line <em>(optional)</em></span>
+                <anvil-component type="DropDown" name="fav_box"></anvil-component>
+              </label>
+              <anvil-component type="Label" name="review_msg" prop:role='["msg-error"]' prop:visible="false"></anvil-component>
+              <div class="ui-row end">
+                <anvil-component type="Button" name="delete_mine_button" prop:text="Delete" prop:role='["btn", "btn-ghost", "btn-danger"]'></anvil-component>
+                <anvil-component type="Button" name="post_button" prop:text="Post review" prop:role='["btn", "btn-primary", "ic-check"]'></anvil-component>
+              </div>
+            </div>
+            <div class="ui-note" anvil:name="join_note"><i class="ic ic-chat"></i> <a href="#auth/signup">Join Yabanana</a> to review this song.</div>
+            <p class="muted" anvil:name="own_note">Reviews from other writers show up here.</p>
+            <anvil-component type="RepeatingPanel" name="reviews_panel" prop:item_template="Yabanana.Items.ReviewRow" prop:role='["sg-review-list"]'></anvil-component>
+            <div class="ui-empty" anvil:name="no_reviews"><i class="ic ic-chat"></i><h3>No reviews yet</h3><p>Be the first to say what landed.</p></div>
+          </section>
+        </div>
+
+        <aside class="sg-side">
+          <div class="ui-card">
+            <h3><i class="ic ic-wave"></i><anvil-component type="Label" name="beat_name" prop:role='["inline"]'></anvil-component></h3>
+            <anvil-component type="Yabanana.Components.Steps" name="steps"></anvil-component>
+            <anvil-component type="Label" name="meter" prop:role='["sg-meter"]'></anvil-component>
+            <anvil-component type="Label" name="theory" prop:role='["sg-theory"]'></anvil-component>
+            <a href="#beats" class="small" anvil:name="beat_link">More about this beat</a>
+          </div>
+          <div class="ui-card">
+            <div class="sg-nums">
+              <div><anvil-component type="Label" name="up_n" prop:role='["sg-num"]'></anvil-component><span>bananas</span></div>
+              <div><anvil-component type="Label" name="rating" prop:role='["sg-num"]'></anvil-component><span>avg rating</span></div>
+              <div><anvil-component type="Label" name="remix_n" prop:role='["sg-num"]'></anvil-component><anvil-component type="Label" name="remix_word" prop:role='["sg-num-label"]'></anvil-component></div>
+            </div>
+            <anvil-component type="RepeatingPanel" name="crit_panel" prop:item_template="Yabanana.Items.CritBar" prop:role='["sg-crit"]'></anvil-component>
+          </div>
+          <div class="ui-card" anvil:name="more_part">
+            <h3><anvil-component type="Label" name="more_title" prop:role='["inline"]'></anvil-component></h3>
+            <anvil-component type="RepeatingPanel" name="more_panel" prop:item_template="Yabanana.Items.MoreLink" prop:role='["sg-more"]'></anvil-component>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

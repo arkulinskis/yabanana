@@ -1,0 +1,30 @@
+<article class="yb-card">
+  <div class="yb-card-top">
+    <anvil-component type="Label" name="rank" prop:role='["card-rank"]' prop:visible="false"></anvil-component>
+    <anvil-component type="Yabanana.Components.SceneBadge" name="badge" bind:scene="self.item['scene']"></anvil-component>
+    <anvil-component type="Label" name="mood" prop:role='["mood"]' bind:text="self.item['mood']" bind:visible="bool(self.item['mood'])"></anvil-component>
+    <span class="flag" anvil:name="flag"><i class="ic" anvil:name="flag_icon"></i><anvil-component type="Label" name="flag_text" prop:role='["flag-text"]'></anvil-component></span>
+  </div>
+  <h3><anvil-component type="Link" name="title_link" prop:role='["card-link"]' bind:text="self.item['title']"></anvil-component></h3>
+  <blockquote class="yb-excerpt">
+    <anvil-component type="Label" name="l1" prop:role='["ex-line"]'></anvil-component>
+    <anvil-component type="Label" name="l2" prop:role='["ex-line"]'></anvil-component>
+    <anvil-component type="Label" name="l3" prop:role='["ex-line"]'></anvil-component>
+    <anvil-component type="Label" name="l4" prop:role='["ex-line", "ex-dim"]'></anvil-component>
+  </blockquote>
+  <div class="yb-card-by">
+    <span>by</span>
+    <anvil-component type="Link" name="writer_link" prop:role='["by-link"]'></anvil-component>
+    <anvil-component type="Label" name="writer_name" prop:role='["by-name"]'></anvil-component>
+    <span aria-hidden="true">·</span>
+    <anvil-component type="Label" name="when" prop:role='["by-when"]'></anvil-component>
+    <anvil-component type="Label" name="remix" prop:role='["by-when"]' prop:text="· remix"></anvil-component>
+    <anvil-component type="Label" name="liked" prop:role='["by-liked"]'></anvil-component>
+  </div>
+  <div class="yb-card-foot">
+    <anvil-component type="Yabanana.Components.BeatChip" name="chip"></anvil-component>
+    <span class="grow"></span>
+    <span class="yb-count" anvil:name="reviews" title="Reviews"><i class="ic ic-chat"></i><anvil-component type="Label" name="review_count" bind:text="str(self.item['review_count'])"></anvil-component></span>
+    <anvil-component type="Yabanana.Components.Upvote" name="upvote"></anvil-component>
+  </div>
+</article>
