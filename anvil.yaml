@@ -421,10 +421,9 @@ db_schema:
     server: full
     title: Users
 metadata:
-  description: Write bars, poems and hooks over 12 beats built from song and poetry theory. Rhymes, similes and metaphors
-    on tap; share your lyrics, get reviews and upvotes.
-  logo_img: asset:icon-512.png
-  title: 'Yabanana: write lyrics, raps and poems over beats'
+  description: "Write bars, poems and hooks over 12 beats built from song and poetry theory. Rhymes, similes and metaphors on tap; share your lyrics, get reviews and upvotes."
+  logo_img: "asset:icon-512.png"
+  title: "Yabanana: write lyrics, raps and poems over beats"
 name: Yabanana
 native_deps:
   head_html: |
@@ -448,7 +447,7 @@ native_deps:
     <meta name="twitter:description" content="Write bars, poems and hooks over 12 beats built from song and poetry theory. Rhymes, similes and metaphors on tap; share your lyrics, get reviews and upvotes.">
     <meta name="twitter:image" content="https://yabanana.com/_/theme/og-image.png">
     <link rel="alternate" type="text/plain" title="Yabanana for AI assistants" href="https://yabanana.com/llms.txt">
-    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "@id": "https://yabanana.com/#app", "name": "Yabanana", "url": "https://yabanana.com/", "description": "Write bars, poems and hooks over 12 beats built from song and poetry theory. Rhymes, similes and metaphors on tap; share your lyrics, get reviews and upvotes.", "image": "https://yabanana.com/_/theme/og-image.png", "inLanguage": "en", "publisher": {"@id": "https://arkvital.com/#org"}, "keywords": "write lyrics online, rap lyrics writer, rhyme finder, songwriting app, poetry writing app, beats to write to, hook writing, lyrics community, rhyme scheme", "applicationCategory": "MultimediaApplication", "operatingSystem": "Any (web browser)", "browserRequirements": "Requires JavaScript and a modern web browser", "featureList": ["Twelve beats built from song and poetry theory", "Rhymes, similes, metaphors and theme palettes one click away", "A rhyme map that colours your rhyme scheme", "Perform mode: the beat plays and the lyrics light up word by word", "The Stage: upvotes, reviews, charts and remixes"], "audience": {"@type": "Audience", "audienceType": "Rappers, poets and pop songwriters"}}, {"@type": "WebSite", "@id": "https://yabanana.com/#site", "url": "https://yabanana.com/", "name": "Yabanana", "publisher": {"@id": "https://arkvital.com/#org"}}, {"@type": "Organization", "@id": "https://arkvital.com/#org", "name": "Arkvital", "url": "https://arkvital.com", "email": "arkvital@outlook.com", "address": {"@type": "PostalAddress", "addressLocality": "Montreal", "addressRegion": "QC", "addressCountry": "CA"}}]}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Service", "@id": "https://yabanana.com/#app", "name": "Yabanana", "url": "https://yabanana.com/", "description": "Write bars, poems and hooks over 12 beats built from song and poetry theory. Rhymes, similes and metaphors on tap; share your lyrics, get reviews and upvotes.", "image": "https://yabanana.com/_/theme/og-image.png", "serviceType": "Write bars, poems and hooks over beats, with rhymes on tap", "provider": {"@id": "https://arkvital.com/#org"}, "areaServed": "Worldwide", "availableChannel": {"@type": "ServiceChannel", "serviceUrl": "https://yabanana.com/", "name": "Web browser"}, "availableLanguage": "en", "audience": {"@type": "Audience", "audienceType": "Rappers, poets and pop songwriters"}}, {"@type": "WebSite", "@id": "https://yabanana.com/#site", "url": "https://yabanana.com/", "name": "Yabanana", "publisher": {"@id": "https://arkvital.com/#org"}}, {"@type": "Organization", "@id": "https://arkvital.com/#org", "name": "Arkvital", "url": "https://arkvital.com", "email": "arkvital@outlook.com", "address": {"@type": "PostalAddress", "addressLocality": "Montreal", "addressRegion": "QC", "addressCountry": "CA"}}]}</script>
     <!-- seo:end -->
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#ffc21a">
