@@ -1,0 +1,43 @@
+<div class="ui yb-sharecard">
+  <h2 class="dlg-h">Share this song</h2>
+  <div class="sc-grid">
+    <div class="sc-preview">
+      <canvas class="sc-canvas" width="1080" height="1080" role="img" aria-label="Lyric card" anvil:dom-node="canvas"></canvas>
+    </div>
+    <div class="sc-side">
+      <div class="sc-head">
+        <b>Pick up to 5 lines</b>
+        <anvil-component type="Label" name="count" prop:role='["fine-print"]'></anvil-component>
+      </div>
+      <anvil-component type="RepeatingPanel" name="lines_panel" prop:item_template="Yabanana.Items.CardLine" prop:role='["sc-lines"]'></anvil-component>
+      <div class="sc-opts">
+        <div class="grp"><span class="lbl">Style</span>
+          <div class="ui-seg" role="group" aria-label="Card style">
+            <button type="button" anvil:name="st_cream" data-v="cream" anvil:on-dom:click="self.style_click">Sticker</button>
+            <button type="button" anvil:name="st_night" data-v="night" anvil:on-dom:click="self.style_click">Night</button>
+            <button type="button" anvil:name="st_scene" data-v="scene" anvil:on-dom:click="self.style_click">Scene</button>
+          </div>
+        </div>
+        <div class="grp"><span class="lbl">Size</span>
+          <div class="ui-seg" role="group" aria-label="Card size">
+            <button type="button" anvil:name="sz_square" data-v="square" anvil:on-dom:click="self.size_click">Square</button>
+            <button type="button" anvil:name="sz_story" data-v="story" anvil:on-dom:click="self.size_click">Story</button>
+          </div>
+        </div>
+      </div>
+      <div class="sc-acts">
+        <anvil-component type="Button" name="download_button" prop:text="Download image" prop:role='["btn", "btn-primary", "ic-download"]'></anvil-component>
+        <anvil-component type="Button" name="share_button" prop:text="Share image" prop:role='["btn", "ic-share"]'></anvil-component>
+      </div>
+      <label class="ui-field sc-link"><span>Song link <em>(its preview shows the title and first lines)</em></span>
+        <span class="sc-link-row">
+          <anvil-component type="TextBox" name="url_box" prop:role='["sc-url"]'></anvil-component>
+          <anvil-component type="Button" name="copy_button" prop:text="Copy link" prop:role='["btn", "ic-link"]'></anvil-component>
+        </span>
+      </label>
+    </div>
+  </div>
+  <div class="ui-row end">
+    <anvil-component type="Button" name="close_button" prop:text="Done" prop:role='["btn", "btn-ghost"]'></anvil-component>
+  </div>
+</div>

@@ -8,7 +8,8 @@ from ... import router, state, yb
 
 class SongCard(SongCardTemplate):
     """A song card (Stage, Bunch, writer pages, landing). item = a song dict from the server, plus optionally
-    "rank" (charts-style number) and "liked" (when it went into your Bunch). Clicking the card opens the song."""
+    "rank" (charts-style number), "liked" (when it went into your Bunch), "challenge" ({week, label}: a "Week 47
+    challenge" tag) and "_first" (the "Be the first review" chip). Clicking the card opens the song."""
 
     def __init__(self, **properties):
         super().__init__(**properties)
@@ -55,6 +56,14 @@ class SongCard(SongCardTemplate):
         self.liked.text = "· saved " + state.ago(s.get("liked")) if s.get("liked") else ""
         self.chip.beat, self.chip.bpm, self.chip.owner = s.get("beat") or "boombap", s.get("bpm"), "card-" + s["id"]
         self.reviews.visible = bool(s.get("review_count"))
+        ch = s.get("challenge")
+        self.chal_link.visible = bool(ch)
+        if ch:
+            self.chal_link.text = ch["label"]
+            router.link(self.chal_link, "challenge", ch["week"])
+        self.first_link.visible = bool(s.get("_first"))  # the Stage's "Waiting for a first review" rail
+        if s.get("_first"):
+            router.link(self.first_link, "song", s["id"], "review")
         self.upvote.visible = s.get("status") == "published" and not s.get("no_up")
         if self.upvote.visible:
             self.upvote.song = s

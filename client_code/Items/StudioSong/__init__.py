@@ -21,3 +21,6 @@ class StudioSong(StudioSongTemplate):
         self.lines.text = state.plural(s.get("lines") or 0, "line")
         self.edited.text = "edited " + state.ago(s.get("updated"))
         self.counts.visible = published
+        ch = s.get("challenge")
+        self.chal.visible = bool(ch)
+        self.chal.text = ch["label"] if ch else ""

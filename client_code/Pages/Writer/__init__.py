@@ -7,7 +7,7 @@ from ... import router, state, yb
 
 class Writer(WriterTemplate):
     """#writer/<user id>: a writer's public page: name, scene, bio, ripeness level (from bananas received), counts,
-    their songs. Open to everyone."""
+    weekly challenges taken and won, their songs (with "Week 47 challenge" tags). Open to everyone."""
 
     def __init__(self, args=(), **properties):
         super().__init__(**properties)
@@ -28,6 +28,10 @@ class Writer(WriterTemplate):
         self.ripe_name.text = r["name"]
         state.set_attr(self.ripe, "title", "%d bananas received%s" % (
             t["upvotes"], ", %d more to %s" % (r["next"]["at"] - t["upvotes"], r["next"]["name"]) if r["next"] else ""))
+        ch = d.get("challenges") or {}
+        self.chal_badge.visible = bool(ch.get("took"))
+        self.chal_text.text = "Weekly challenges: took %d · won %d" % (ch.get("took") or 0, ch.get("won") or 0)
+        state.set_attr(self.chal_badge, "title", "Weekly Bar Challenge entries shared, and weeks won")
         self.joined.text = "joined " + state.month_year(w.get("joined")) if w.get("joined") else ""
         self.joined.visible = bool(w.get("joined"))
         self.name.text = w["name"]

@@ -18,6 +18,8 @@ class ReviewRow(ReviewRowTemplate):
         self.when.text = state.ago(v.get("created"))
         self.scores.text = "   ".join("%s %s/5" % (c, v["r"][i]) for i, c in enumerate(v.get("criteria") or []))
         self.fav.text = "“%s”" % v["fav_line"] if v.get("fav_line") else ""
+        self.rework_part.visible = bool(v.get("rework_line"))
+        self.rework.text = "“%s”" % v["rework_line"] if v.get("rework_line") else ""
 
     @handle("delete_button", "click")
     def delete_button_click(self, **event_args):

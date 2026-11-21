@@ -1,0 +1,16 @@
+<div class="cg-past-row">
+  <div class="cg-week-head">
+    <anvil-component type="Link" name="week_link" prop:role='["row-link", "cg-week-link"]'></anvil-component>
+    <anvil-component type="Label" name="meta" prop:role='["row-meta"]'></anvil-component>
+  </div>
+  <div class="cg-week-top" anvil:name="top_part">
+    <i class="ic ic-trophy" aria-hidden="true"></i>
+    <div class="grow">
+      <anvil-component type="Label" name="top_what" prop:role='["cg-week-what"]'></anvil-component>
+      <b><anvil-component type="Link" name="top_link" prop:role='["row-link"]'></anvil-component></b>
+      <span class="muted"> by </span><anvil-component type="Link" name="by_link" prop:role='["by-link"]'></anvil-component>
+    </div>
+    <anvil-component type="Label" name="score" prop:role='["cg-week-score"]'></anvil-component>
+  </div>
+  <anvil-component type="Label" name="none" prop:role='["fine-print"]' prop:text="Nobody entered that week."></anvil-component>
+</div>

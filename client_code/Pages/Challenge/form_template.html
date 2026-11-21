@@ -1,0 +1,82 @@
+<anvil-form layout="Yabanana.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap cg-page">
+      <div class="ui-empty" anvil:name="missing">
+        <i class="ic ic-trophy"></i>
+        <h1 class="empty-h1">No challenge here</h1>
+        <anvil-component type="Label" name="missing_text"></anvil-component>
+        <a class="ui-btn primary" href="#challenge"><i class="ic ic-trophy"></i>This week's challenge</a>
+      </div>
+
+      <div anvil:name="body">
+        <div class="cg-hero" anvil:name="hero">
+          <span class="cg-tape" aria-hidden="true"></span>
+          <div class="cg-hero-top">
+            <span class="cg-week"><i class="ic ic-trophy"></i><anvil-component type="Label" name="week" prop:role='["inline"]'></anvil-component></span>
+            <anvil-component type="Label" name="status" prop:role='["badge"]'></anvil-component>
+            <a class="cg-back" href="#challenge" anvil:name="back_link"><i class="ic ic-back"></i>This week</a>
+          </div>
+          <anvil-component type="Label" name="title" prop:role='["cg-title"]'></anvil-component>
+          <anvil-component type="Label" name="rule" prop:role='["cg-rule"]'></anvil-component>
+          <anvil-component type="Label" name="spark" prop:role='["cg-spark"]'></anvil-component>
+          <ul class="cg-facts">
+            <li><i class="ic ic-pen"></i><anvil-component type="Label" name="f_lines" prop:role='["inline"]'></anvil-component></li>
+            <li><i class="ic ic-clock"></i><anvil-component type="Label" name="f_when" prop:role='["inline"]'></anvil-component></li>
+            <li><i class="ic ic-banana"></i><span>Entries are ranked by bananas from the community</span></li>
+          </ul>
+        </div>
+
+        <div class="ui-note cg-soon" anvil:name="soon"><i class="ic ic-clock"></i> The weekly challenge opens very soon. Warm up in the <a href="#lab">Rhyme lab</a> meanwhile.</div>
+
+        <div class="cg-mine" anvil:name="mine_part">
+          <i class="ic ic-pen"></i>
+          <anvil-component type="Label" name="mine_text" prop:role='["cg-mine-text"]'></anvil-component>
+          <anvil-component type="Link" name="mine_link" prop:text="Open your entry" prop:role='["btn", "btn-sm", "btn-primary", "ic-pen"]'></anvil-component>
+        </div>
+
+        <section class="cg-sec" anvil:name="scenes_part" aria-label="Pick your scene">
+          <h2 class="cg-h2">Pick your scene</h2>
+          <p class="muted">Every scene gets its own beat. Your draft opens in the Studio with the rule pinned on top.</p>
+          <div class="cg-scenes">
+            <div class="cg-scene sc-rap">
+              <span class="yb-scene sc-rap">Rap</span>
+              <anvil-component type="Label" name="beat_rap" prop:role='["cg-beat"]'></anvil-component>
+              <anvil-component type="Yabanana.Components.BeatChip" name="chip_rap" prop:owner="chal-rap"></anvil-component>
+              <anvil-component type="Button" name="take_rap" prop:text="Write it as rap" prop:role='["btn", "btn-primary", "ic-pen"]'></anvil-component>
+            </div>
+            <div class="cg-scene sc-poetry">
+              <span class="yb-scene sc-poetry">Poetry</span>
+              <anvil-component type="Label" name="beat_poetry" prop:role='["cg-beat"]'></anvil-component>
+              <anvil-component type="Yabanana.Components.BeatChip" name="chip_poetry" prop:owner="chal-poetry"></anvil-component>
+              <anvil-component type="Button" name="take_poetry" prop:text="Write it as poetry" prop:role='["btn", "btn-primary", "ic-pen"]'></anvil-component>
+            </div>
+            <div class="cg-scene sc-pop">
+              <span class="yb-scene sc-pop">Pop</span>
+              <anvil-component type="Label" name="beat_pop" prop:role='["cg-beat"]'></anvil-component>
+              <anvil-component type="Yabanana.Components.BeatChip" name="chip_pop" prop:owner="chal-pop"></anvil-component>
+              <anvil-component type="Button" name="take_pop" prop:text="Write it as pop" prop:role='["btn", "btn-primary", "ic-pen"]'></anvil-component>
+            </div>
+          </div>
+        </section>
+
+        <section class="cg-sec" anvil:name="entries_part">
+          <div class="cg-sec-head">
+            <h2 class="cg-h2">Entries <anvil-component type="Label" name="entry_n" prop:role='["inline", "cg-count"]'></anvil-component></h2>
+            <anvil-component type="Label" name="entries_note" prop:role='["fine-print"]'></anvil-component>
+          </div>
+          <anvil-component type="RepeatingPanel" name="entries_panel" prop:item_template="Yabanana.Items.ChartRow" prop:role='["ch-list"]'></anvil-component>
+          <div class="ui-empty" anvil:name="no_entries">
+            <i class="ic ic-mic"></i>
+            <h3>Be the first entry</h3>
+            <anvil-component type="Label" name="no_entries_text"></anvil-component>
+          </div>
+        </section>
+
+        <section class="cg-sec" anvil:name="past_part">
+          <h2 class="cg-h2">Past weeks</h2>
+          <anvil-component type="RepeatingPanel" name="past_panel" prop:item_template="Yabanana.Items.ChallengeWeek" prop:role='["cg-past"]'></anvil-component>
+        </section>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

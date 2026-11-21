@@ -20,6 +20,7 @@ PAGES = {
     "song": (None, "Song"),
     "studio": ("user", "Studio"),
     "charts": (None, "Charts"),
+    "challenge": (None, "Weekly challenge"),
     "bunch": ("user", "Your Bunch"),
     "writer": (None, "Writer"),
     "beats": (None, "Beats & theory"),
@@ -57,6 +58,9 @@ def _form(name, args):
     if name == "charts":
         from .Pages.Charts import Charts
         return Charts
+    if name == "challenge":
+        from .Pages.Challenge import Challenge
+        return Challenge
     if name == "bunch":
         from .Pages.Bunch import Bunch
         return Bunch

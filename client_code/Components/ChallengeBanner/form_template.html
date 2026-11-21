@@ -1,0 +1,29 @@
+---
+custom_component: true
+properties:
+  - name: data
+    type: object
+    description: 'This week''s challenge from the server (Challenges.summary): {week, label, title, rule, lines, ends, entries, my_entry}. None hides the banner.'
+    default_binding_prop: true
+toolbox_item:
+  title: Challenge banner
+  group: Yabanana
+help_text: |
+  "This week: Flip it: GLASS · 8 lines · 4 days left · 12 entries" with Take the challenge (or Open your entry) and
+  See the entries. Shown on the Stage and in the Studio.
+---
+<div class="yb-chal-host">
+  <section class="yb-chal" anvil:name="box" aria-label="This week's challenge">
+    <span class="yb-chal-tape" aria-hidden="true"></span>
+    <span class="yb-chal-badge" aria-hidden="true"><i class="ic ic-trophy"></i></span>
+    <div class="yb-chal-body">
+      <p class="yb-chal-line"><anvil-component type="Label" name="week" prop:role='["inline", "yb-chal-week"]'></anvil-component> <anvil-component type="Label" name="title" prop:role='["inline", "yb-chal-title"]'></anvil-component></p>
+      <anvil-component type="Label" name="meta" prop:role='["yb-chal-meta"]'></anvil-component>
+      <anvil-component type="Label" name="rule" prop:role='["yb-chal-rule"]'></anvil-component>
+    </div>
+    <div class="yb-chal-acts">
+      <anvil-component type="Button" name="take_button" prop:text="Take the challenge" prop:role='["btn", "btn-primary", "ic-pen"]'></anvil-component>
+      <anvil-component type="Link" name="see_link" prop:text="See the entries" prop:role='["btn", "ic-trophy"]'></anvil-component>
+    </div>
+  </section>
+</div>

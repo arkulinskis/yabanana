@@ -17,6 +17,7 @@
               <anvil-component type="Label" name="mood" prop:role='["badge"]'></anvil-component>
               <span class="ui-badge brand" anvil:name="staff_pick"><i class="ic ic-star"></i>Staff pick</span>
               <span class="ui-badge accent" anvil:name="boosted"><i class="ic ic-flame"></i><anvil-component type="Label" name="boosted_text" prop:role='["inline"]'></anvil-component></span>
+              <anvil-component type="Link" name="chal_link" prop:role='["yb-chal-tag", "ic-trophy"]'></anvil-component>
             </div>
             <anvil-component type="Label" name="title" prop:role='["sg-title"]'></anvil-component>
             <div class="sg-by">
@@ -53,6 +54,13 @@
 
           <section class="sg-reviews">
             <h2 class="sg-rev-h">Reviews <anvil-component type="Label" name="review_n" prop:role='["inline", "sg-rev-n"]'></anvil-component></h2>
+            <div class="sg-ask" anvil:name="ask_part">
+              <i class="ic ic-quote" aria-hidden="true"></i>
+              <div>
+                <anvil-component type="Label" name="ask_who" prop:role='["sg-ask-who"]'></anvil-component>
+                <anvil-component type="Label" name="ask_text" prop:role='["sg-ask-text"]'></anvil-component>
+              </div>
+            </div>
             <div class="ui-card sg-form" anvil:name="form_part">
               <anvil-component type="Label" name="form_title" prop:role='["sg-form-title"]'></anvil-component>
               <div class="sg-rate"><anvil-component type="Label" name="c1" prop:role='["sg-lbl"]'></anvil-component><anvil-component type="Yabanana.Components.Rating" name="rate1"></anvil-component></div>
@@ -61,9 +69,14 @@
               <label class="ui-field"><span>What worked? What would you change?</span>
                 <anvil-component type="TextArea" name="review_box" prop:placeholder="Be specific and kind: name a line, an image, a rhyme." prop:height="110"></anvil-component>
               </label>
-              <label class="ui-field"><span>Favourite line <em>(optional)</em></span>
-                <anvil-component type="DropDown" name="fav_box"></anvil-component>
-              </label>
+              <div class="sg-picks">
+                <label class="ui-field"><span>Favourite line <em>(optional)</em></span>
+                  <anvil-component type="DropDown" name="fav_box"></anvil-component>
+                </label>
+                <label class="ui-field"><span>A line to rework <em>(optional)</em></span>
+                  <anvil-component type="DropDown" name="rework_box"></anvil-component>
+                </label>
+              </div>
               <anvil-component type="Label" name="review_msg" prop:role='["msg-error"]' prop:visible="false"></anvil-component>
               <div class="ui-row end">
                 <anvil-component type="Button" name="delete_mine_button" prop:text="Delete" prop:role='["btn", "btn-ghost", "btn-danger"]'></anvil-component>

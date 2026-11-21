@@ -78,6 +78,25 @@ def name_of(user):
     return user["display_name"] or (user["email"] or "Someone").split("@")[0].capitalize()
 
 
+def col(row, name, default=None):
+    """A column that may not exist yet on the live database (new columns wait for the user to accept Anvil's
+    Schema Mismatch alert): its value, or default if the column is missing."""
+    try:
+        v = row[name]
+    except Exception:
+        return default
+    return default if v is None else v
+
+
+def set_col(row, name, value):
+    """Write a column that may not exist yet (see col). True if it was written."""
+    try:
+        row[name] = value
+        return True
+    except Exception:
+        return False
+
+
 def row_by_id(table, row_id):
     """get_by_id that returns None for a missing or malformed id (ids come from the browser)."""
     if not isinstance(row_id, str) or not row_id:
@@ -98,6 +117,15 @@ def rate_limited(key, limit, seconds):
         return True
     typing.cast(dict, anvil.server.session)[store] = recent + [stamp.isoformat()]
     return False
+
+
+def table(name):
+    """An app table that may not exist yet on the live database (a new table waits for the Schema Mismatch step):
+    the table, or None."""
+    try:
+        return getattr(app_tables, name)
+    except Exception:
+        return None
 
 
 def get_setting(key, default=None):

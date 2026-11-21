@@ -391,9 +391,11 @@
     var b = YB.beat(beatKey), k = (barsPerLine || 1) / (b.lines || 1);
     return [Math.max(1, Math.round(b.target[0] * k)), Math.max(1, Math.round(b.target[1] * k))];
   };
-  /* The Studio's flow strip under a section: syllables per line vs the beat's target, rhyme letters, meter on poetry beats. */
-  YB.flowHtml = function (text, beatKey, barsPerLine) {
-    var esc = UI.esc, lines = String(text || '').split('\n'), t = YB.target(beatKey, barsPerLine), poetic = POETIC[beatKey];
+  /* The Studio's flow strip under a section: syllables per line vs the beat's target (or a challenge rule's
+     [min, max], `target`), rhyme letters, meter on poetry beats. */
+  YB.flowHtml = function (text, beatKey, barsPerLine, target) {
+    var esc = UI.esc, lines = String(text || '').split('\n'), poetic = POETIC[beatKey];
+    var t = target && target.length === 2 ? [+target[0], +target[1]] : YB.target(beatKey, barsPerLine);
     var sch = W.ready ? W.scheme(lines) : null;
     var chips = lines.map(function (l, i) {
       if (!l.trim()) return '';
@@ -403,7 +405,79 @@
       return '<span class="sd-chip ' + (ok ? 'ok' : 'off') + '" title="' + esc(tip) + '">' + a.syllables + (sch && sch.letters[i] ? '<sup>' + esc(sch.letters[i]) + '</sup>' : '') + '</span>' +
         (poetic && m ? '<span class="sd-chip m" title="' + esc(tip) + '">' + (m.name === poetic ? '✓ ' : '') + esc(m.name.slice(0, 4)) + '</span>' : '');
     }).join('');
-    return chips ? '<span class="lbl">Syllables/line · aim ' + t[0] + (t[1] !== t[0] ? '–' + t[1] : '') + '</span>' + chips : '<span class="lbl">Syllable counts and rhyme letters show up here as you write.</span>';
+    var aim = target && target.length === 2 ? (t[0] <= 1 ? 'up to ' + t[1] : t[0] + (t[1] !== t[0] ? '–' + t[1] : '')) + ' (challenge rule)'
+      : t[0] + (t[1] !== t[0] ? '–' + t[1] : '');
+    return chips ? '<span class="lbl">Syllables/line · aim ' + aim + '</span>' + chips : '<span class="lbl">Syllable counts and rhyme letters show up here as you write.</span>';
+  };
+
+  /* The Weekly Bar Challenge's live checklist in the Studio (server_code/Challenges.py, CHALLENGES[].check):
+     rule = {word, times} | {syll: [min, max]} | {words: [min, max]} | {mono} | {start} | {bookend} | {ban: [...]} |
+     {colour} | {end: '?'}, minLines = the line count to reach, flip = the word to show (KEYS for "key").
+     Returns chips: done ones ticked, open ones say what's missing. */
+  var COLOURS = ('red crimson scarlet ruby cherry rose pink coral salmon orange amber peach tangerine yellow gold golden ' +
+    'lemon mustard honey green emerald jade lime olive mint sage teal turquoise aqua cyan blue navy azure cobalt ' +
+    'sapphire indigo violet purple lavender lilac plum magenta mauve brown tan beige bronze copper rust chocolate ' +
+    'coffee caramel black white ivory cream pearl grey gray silver charcoal ash neon pastel rainbow blonde ebony ' +
+    'maroon burgundy khaki ochre sepia scarlet vermilion').split(' ');
+  YB.challengeHtml = function (text, rule, minLines, flip) {
+    var esc = UI.esc, r = rule || {}, items = [];
+    var lines = String(text || '').split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+    function chip(ok, label) { items.push('<span class="sd-rule ' + (ok ? 'ok' : 'todo') + '">' + (ok ? '✓ ' : '○ ') + esc(label) + '</span>'); }
+    function words(l) { return (l.match(/[A-Za-z’'À-ÿĀ-ž]+(?:[-’'][A-Za-z]+)*/g) || []).map(function (w) { return w.toLowerCase().replace(/’/g, "'"); }); }
+    function lastWord(l) { var w = words(l); return w.length ? w[w.length - 1] : ''; }
+    if (minLines) chip(lines.length >= minLines, lines.length + ' of ' + minLines + ' lines');
+    if (r.word) {
+      var re = new RegExp('\\b' + r.word + '\\w*', 'gi'), n = (String(text || '').match(re) || []).length, need = r.times || 1;
+      chip(n >= need, (flip || r.word).toUpperCase() + ' used ' + n + ' of ' + need + ' times');
+    }
+    if (r.syll) {
+      var lo = r.syll[0], hi = r.syll[1], aim = lo <= 1 ? 'up to ' + hi : lo === hi ? String(lo) : lo + '–' + hi;
+      if (!W.ready) chip(false, 'counting syllables…');
+      else {
+        var off = lines.filter(function (l) { var n2 = W.line(l).syllables; return n2 < lo || n2 > hi; }).length;
+        chip(lines.length && !off, off ? off + (off === 1 ? ' line is' : ' lines are') + ' not ' + aim + ' syllables' : 'every line ' + aim + ' syllables');
+      }
+    }
+    if (r.words) {
+      var wlo = r.words[0], whi = r.words[1];
+      var woff = lines.filter(function (l) { var c = words(l).length; return c < wlo || c > whi; }).length;
+      chip(lines.length && !woff, woff ? woff + (woff === 1 ? ' line has' : ' lines have') + ' the wrong word count' : 'every line ' + wlo + (whi !== wlo ? '–' + whi : '') + ' words');
+    }
+    if (r.mono) {
+      if (!W.ready) chip(false, 'listening for rhymes…');
+      else {
+        var keys = lines.map(function (l) { var w = lastWord(l); return W.rhymeKey(w) || w.slice(-3); });
+        var odd = keys.filter(function (k) { return k !== keys[0]; }).length;
+        chip(lines.length > 1 && !odd, odd ? odd + (odd === 1 ? ' line breaks' : ' lines break') + ' the rhyme' : 'one rhyme all the way down');
+      }
+    }
+    if (r.start) {
+      var first = lines.map(function (l) { return words(l)[0] || ''; });
+      var diff = first.filter(function (f) { return f !== first[0]; }).length;
+      chip(lines.length > 1 && !diff, diff ? diff + (diff === 1 ? ' line starts' : ' lines start') + ' differently' : 'every line starts with "' + (first[0] || '…') + '"');
+    }
+    if (r.bookend) {
+      var a = lines.length ? lastWord(lines[0]) : '', b = lines.length > 1 ? lastWord(lines[lines.length - 1]) : '';
+      chip(!!a && a === b, a && a === b ? 'first and last line end on "' + a + '"' : 'end the last line on "' + (a || '…') + '"');
+    }
+    if (r.ban) {
+      var banned = {}, hits = {};
+      r.ban.forEach(function (w) { banned[w] = 1; });
+      lines.forEach(function (l) { words(l).forEach(function (w) { if (banned[w]) hits[w] = 1; }); });
+      var found = Object.keys(hits);
+      chip(lines.length && !found.length, found.length ? 'found: ' + found.join(', ') : 'no ' + r.ban.slice(0, 4).join(' / '));
+    }
+    if (r.colour) {
+      var set = {};
+      COLOURS.forEach(function (c) { set[c] = 1; });
+      var plain = lines.filter(function (l) { return !words(l).some(function (w) { return set[w.replace(/s$/, '')] || set[w]; }); }).length;
+      chip(lines.length && !plain, plain ? plain + (plain === 1 ? ' line has' : ' lines have') + ' no colour yet' : 'a colour in every line');
+    }
+    if (r.end) {
+      var open = lines.filter(function (l) { return l.slice(-r.end.length) !== r.end; }).length;
+      chip(lines.length && !open, open ? open + (open === 1 ? ' line doesn\'t' : ' lines don\'t') + ' end with ' + r.end : 'every line ends with ' + r.end);
+    }
+    return items.join('');
   };
   /* The Rhyme lab's line checker: per line the syllables, stress marks, meter and rhyme letter, rhyming words coloured. */
   YB.checkHtml = function (text) {

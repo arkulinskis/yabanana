@@ -2,9 +2,15 @@
   <anvil-block slot="content">
     <div class="ui-wrap">
       <div class="ui-page-head">
-        <div><div class="eyebrow">Studio</div><h1>Your notebook</h1><p class="muted">Drafts stay private until you share them.</p></div>
+        <div><h1>Your notebook</h1><p class="muted">Drafts stay private until you share them.</p></div>
         <a class="ui-btn primary lg" href="#studio/new"><i class="ic ic-plus"></i>New song</a>
       </div>
+      <anvil-component type="Yabanana.Components.ChallengeBanner" name="chal"></anvil-component>
+      <section class="ui-card sd-news" anvil:name="news_part" aria-label="What's new on your songs">
+        <h2 class="sd-news-h"><i class="ic ic-bell" aria-hidden="true"></i><anvil-component type="Label" name="news_title" prop:role='["inline"]'></anvil-component></h2>
+        <anvil-component type="RepeatingPanel" name="news_panel" prop:item_template="Yabanana.Items.ActivityRow" prop:role='["sd-news-list"]'></anvil-component>
+        <anvil-component type="Label" name="news_none" prop:role='["fine-print"]'></anvil-component>
+      </section>
       <div class="sd-totals">
         <div class="ui-card ui-stat"><anvil-component type="Label" name="t_published" prop:role='["stat-num"]'></anvil-component><span>on stage</span></div>
         <div class="ui-card ui-stat"><anvil-component type="Label" name="t_drafts" prop:role='["stat-num"]'></anvil-component><anvil-component type="Label" name="t_drafts_word" prop:role='["stat-word"]'></anvil-component></div>
@@ -14,7 +20,7 @@
       <anvil-component type="RepeatingPanel" name="songs_panel" prop:item_template="Yabanana.Items.StudioSong" prop:role='["sd-list"]'></anvil-component>
       <div class="ui-empty" anvil:name="empty">
         <i class="ic ic-pen"></i>
-        <h3>Your notebook is empty</h3>
+        <h2 class="empty-h2">Your notebook is empty</h2>
         <p>Pick a scene and a beat, and write your first lines. Rhymes are one click away.</p>
         <a class="ui-btn primary" href="#studio/new"><i class="ic ic-plus"></i>Start your first song</a>
       </div>

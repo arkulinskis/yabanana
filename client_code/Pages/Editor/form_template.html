@@ -21,6 +21,18 @@
         <anvil-component type="TextBox" name="title_box" prop:placeholder="Untitled" prop:role='["sd-title"]'></anvil-component>
         <p class="small muted sd-remix" anvil:name="remix_part">Remix of <anvil-component type="Link" name="remix_link" prop:role='["by-link"]'></anvil-component> <anvil-component type="Label" name="remix_by" prop:role='["inline"]'></anvil-component></p>
 
+        <div class="sd-chal" anvil:name="chal_part">
+          <div class="sd-chal-top">
+            <span class="sd-chal-week"><i class="ic ic-trophy" aria-hidden="true"></i><anvil-component type="Label" name="chal_week" prop:role='["inline"]'></anvil-component></span>
+            <anvil-component type="Label" name="chal_title" prop:role='["sd-chal-title"]'></anvil-component>
+            <span class="grow"></span>
+            <anvil-component type="Link" name="chal_link" prop:text="See the entries" prop:role='["by-link"]'></anvil-component>
+          </div>
+          <anvil-component type="Label" name="chal_rule" prop:role='["sd-chal-rule"]'></anvil-component>
+          <div class="sd-chal-checks" anvil:dom-node="chal_checks" aria-live="polite"></div>
+          <anvil-component type="Label" name="chal_when" prop:role='["fine-print"]'></anvil-component>
+        </div>
+
         <div class="sd-ctl">
           <div class="grp"><span class="lbl">Scene</span>
             <div class="ui-seg" role="group" aria-label="Scene">
@@ -58,6 +70,10 @@
               <anvil-component type="Button" name="add_bridge" prop:text="Bridge" prop:role='["btn", "btn-sm", "ic-plus"]'></anvil-component>
               <anvil-component type="Button" name="add_stanza" prop:text="Stanza" prop:role='["btn", "btn-sm", "ic-plus"]'></anvil-component>
             </div>
+            <label class="ui-field sd-ask"><span>Ask your reviewers <em>(optional)</em></span>
+              <anvil-component type="TextBox" name="ask_box" prop:placeholder="e.g. Does the hook land? Is the second verse too long?"></anvil-component>
+              <anvil-component type="Label" name="ask_hint" prop:role='["fine-print"]'></anvil-component>
+            </label>
             <details class="ui-card sd-preview" anvil:dom-node="preview_box">
               <summary>Rhyme map preview</summary>
               <div class="sd-preview-in"><anvil-component type="Yabanana.Components.Lyrics" name="preview"></anvil-component></div>

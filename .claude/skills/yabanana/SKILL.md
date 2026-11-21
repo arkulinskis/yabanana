@@ -14,10 +14,8 @@ and remix them. Charts, writer pages, Beats & theory and a Rhyme lab round it ou
 **Where it lives:**
 - Folder `C:\Users\arkvi\Documents\CLAUDE\yabanana-forms\` = the git clone of **github.com/arkulinskis/yabanana**.
   "git" layout: the folder *is* the Anvil app. Live at https://yabanana.com (Anvil pulls `master`).
-- **Converted to native Anvil Forms on branch `forms` (2026-11-04), not merged yet.** Until the user approves and it is
-  merged, `master` and the live app still run the old JavaScript version, built from the old source folder
-  `C:\Users\arkvi\Documents\CLAUDE\yabanana\` (tools/deploy.py). Don't deploy from both: once `forms` is merged, retire
-  the old folder (CONVERT.md step 5) and update apps.json (folder, `layout: git`, `ui: forms`, this guide's path).
+- **Native Anvil Forms on `master`** (converted on branch `forms` 2026-11-04, merged by the user; the old JavaScript
+  folder `yabanana\` is retired). Deploy = push `master` (apps.json `deploy: master`).
 - Made from `APP_MAKER\template-forms`. Anvil's own agent skills describe the same model
   (`APP_MAKER\vendor\anvil-agent-references\skills\client-forms` ...; ANVIL_NOTES.md, "Native Anvil Forms").
 - **README.md** lists every feature. Keep it up to date.
@@ -42,7 +40,7 @@ an LLM. Claude assumes details and builds; Claude deploys. Mobile-first: every p
    upvote, promote, Bunch, charts, profile, writer page, delete, sign out), phone.js (true 390 px, every page, the
    helper sheet), admin.js, a11y.js (axe WCAG 2.2 AA on every page, light + dark). Server edits need `--restart`.
    `--only flow.js` runs one; `--shots DIR` = every screen, desktop + phone, light + dark, visitor + member: Read them.
-5. Commit only your files as arkulinskis with the Co-Authored-By line; push (`forms` until it is merged, then `master`).
+5. Commit only your files as arkulinskis with the Co-Authored-By line; push `master`.
    New tables/columns: tell the user to accept the **Schema Mismatch** alert ("The schema of the source code is correct").
 
 ## Architecture
@@ -62,12 +60,13 @@ client_code/
   Layouts/Shell          header (menu, Write button, account menu), footer, phone tab bar; refresh(page) also puts
                          `page-<name>` on the frame (.page-landing, .page-studio)
   Pages/                 Landing, Stage (#home), Song, Studio, StudioNew, Editor, Charts, Bunch, Writer, Beats, Lab,
-                         Profile, Admin (overview, songs, reports, feedback, users, demo), Auth
+                         Profile, Admin (overview, songs, reports, feedback, users, demo), Auth, Challenge
   Components/            BeatChip, Steps, Upvote, Avatar, SceneBadge, ScenePicker, Rating, Lyrics, Helper
   Items/                 SongCard, FreshRow, ChartRow, StudioSong, SectionEditor, ReviewRow, CritBar, MoreLink,
                          BeatCard, BeatOption, AdminSongRow, ReportRow, FeedbackRow, UserRow, NavLink
   Dialogs/               JoinNudge, ReportSong, BeatPicker, ShareLink
 server_code/             Songs, Community, Moderation, Accounts, Admin, DemoData, Feedback, common, SchemaCheck,
+                         Challenges (Weekly Bar Challenge), SongLinks (/s/<slug> + /songs.xml),
                          legal_server (kit), seo_routes (kit)
 theme/assets/            app.css (tokens + pages + role layer), icons.css (tools/build_icons.py from app-kit.js),
                          app-kit.js, the engines yb-*.js, rhymes.txt + wordbank.json (dictionaries), icons, og-image
@@ -91,7 +90,36 @@ on the spot, so the engines take callbacks instead (`YB.whenWords(cb)`).
 legal_*, scene, bio), `app_settings`, `feedback`, `songs` (owner, title, scene, mood, beat, bpm, bars_per_line,
 sections = [{kind, text}], status draft|published, created/updated/published, upvotes, review_count, rating (cached:
 Songs.recount), featured, hidden, remix_of, is_demo), `upvotes` (the Bunch), `reviews` (r1-r3, text, fav_line),
-`promotions`, `reports`.
+`promotions`, `reports`, `challenge_entries` (song, user, week "2026-W47", created, is_demo). Added 2026-11-20:
+`songs.ask` (the writer's question) and `reviews.rework_line`, read with `C.col` and written with `C.set_col`, and the
+`challenge_entries` table reached through `C.table(...)`, so the live app keeps working until the user accepts the
+Schema Mismatch alert.
+
+## The 2026-11-20 features (where they live)
+
+- **Weekly Bar Challenge** (`server_code/Challenges.py`): 16 challenges in `CHALLENGES` (title, rule, spark, lines, a
+  `check` the Studio runs, a beat per scene). Weeks are ISO weeks in UTC; week 1 = the week the feature first ran
+  (app setting `challenge_epoch`), so the first live week is always `CHALLENGES[0]` "Flip it: GLASS", the prompt the
+  demo entries (`DemoData.CHALLENGE_SONGS`, loaded by `load_challenge`, or by `Challenges.ensure_demo` for an app whose
+  demo loaded earlier) were written for. Pin a challenge to a week with the app setting `challenge_override` =
+  `{"2026-W48": "keys"}`. One entry per member per week (`start_challenge_song` returns the same draft); an entry counts
+  once shared before the week ends; ranking = bananas created before week end + 7 days, then rating. Client:
+  `client_code/challenge.py` (take), `Components/ChallengeBanner` (Stage, Studio), the 4th card on `Pages/StudioNew`,
+  `Pages/Challenge` + `Items/ChallengeWeek`, `ChartRow` period "challenge". The editor's rule note and live checks:
+  `YB.challengeHtml` in yb-words.js; a syllable rule also retargets the flow strip (`YB.flowHtml(..., target)`).
+  **New challenge:** append to `CHALLENGES` (never reorder: the rotation is by position), with a `check` kind that
+  `YB.challengeHtml` knows (word/times, syll, words, mono, start, bookend, ban, colour, end).
+- **Lyric cards + song links:** `Dialogs/ShareSong` (+ `Items/CardLine`) draws with `theme/assets/yb-card.js`
+  (`YB.card.render/save/share/canShare`; lyrics in Fraunces only when all text is Latin-1). `server_code/SongLinks.py`
+  serves `/s/<slug>` (slug = row id without brackets, comma -> "-"; public songs only, else a 404 that never says a
+  draft exists) with og/twitter tags, MusicComposition JSON-LD and the lyrics as text, then `location.replace` to
+  `#song/<id>`; `/songs.xml` lists shared songs. It's kept out of `seo_routes.py` (the SEO kit rewrites that file).
+  `yb.song_link(id)` builds the link. `get_song` returns `fav_counts` (the card starts on the most-picked line).
+- **Feedback loop:** `songs.ask` (Editor "Ask your reviewers", pinned on the song page), `reviews.rework_line`
+  (validated against the song's lines like `fav_line`), the Stage's `lonely` rail (`Songs.lonely_songs`: unreviewed,
+  never the caller's, recent reviewers first; `#song/<id>/review` scrolls to the form), and the Studio's "New since your
+  last visit" (`Songs.my_activity(since)`, events on MY songs by OTHER people, max 20, since clamped to 60 days; the
+  browser keeps `activitySeen`).
 
 ## How things are done here
 
@@ -140,12 +168,15 @@ specifics, learned in the conversion:
 - Headless Chrome needs `--autoplay-policy=no-user-gesture-required` for the beat player (drive.mjs has it).
 - The local App Server 1.18 lags hosted Anvil (anvil-dropzone wrappers, notification markup): test on the user's Anvil
   link of the branch too for big changes.
-- Email confirmation is off, so whoever first signs up with an ADMIN_EMAILS address becomes admin.
+- Admins: the App Secret `admin_emails` lists addresses, and only a PROVEN one is promoted (Google sign-in, or a
+  confirmed email: confirmation is off, so a password sign-up with the admin's address is never promoted). Ticking
+  `is_admin` in the users table works too. Locally the App Server gets `--secret admin_emails=admin@example.com`.
+- Never name a Form attribute `style`, `size` or similar: templated Forms already have some (`self.style` is a Style
+  object; ShareSong uses `card_style` / `card_size`). Skulpt also failed on a `lambda` that read an annotated local
+  (`favs: dict = ...; max(favs, key=lambda k: favs[k])`): use a loop.
 
 ## Privacy & Terms (legal kit)
 
 From `C:/Users/arkvi/Documents/CLAUDE/APP_MAKER/legal-kit`: change `apps/yabanana.json`, then there
-`python -I build.py yabanana && python -I install.py yabanana` (while apps.json still points at the old folder,
-install into this one by overriding `install.APPS["yabanana"] = ("yabanana-forms", "git")`), then
-`python tools/assets.py` and deploy. Sign-up keeps the tick box (`legal.consent_field()` in Pages/Auth).
+`python -I build.py yabanana && python -I install.py yabanana`, then `python tools/assets.py` and deploy. Sign-up keeps the tick box (`legal.consent_field()` in Pages/Auth).
 Feedback = Prepsto only ("Submit feedback", code gncbgnf).

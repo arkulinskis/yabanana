@@ -2,7 +2,7 @@
   <anvil-block slot="content">
     <div class="ui-wrap">
       <div class="ui-page-head">
-        <div><div class="eyebrow">New song</div><h1>What are we writing?</h1>
+        <div><h1>What are we writing?</h1>
           <p class="muted">Pick a scene: it sets the starting beat and sections. You can change everything later.</p></div>
       </div>
       <div class="sd-pick">
@@ -21,6 +21,20 @@
           <span class="muted">Hooks, choruses, singability. Starts on <strong>Four on the Floor</strong>.</span>
           <em>There's glitter in the gutter, there's a bassline in the rain</em>
         </button>
+        <div class="sd-pick-chal" anvil:name="chal_card">
+          <span class="yb-chal-badge" aria-hidden="true"><i class="ic ic-trophy"></i></span>
+          <div class="sd-pick-chal-body">
+            <p class="yb-chal-line"><anvil-component type="Label" name="chal_week" prop:role='["inline", "yb-chal-week"]'></anvil-component> <anvil-component type="Label" name="chal_title" prop:role='["inline", "yb-chal-title"]'></anvil-component></p>
+            <anvil-component type="Label" name="chal_meta" prop:role='["yb-chal-meta"]'></anvil-component>
+            <anvil-component type="Label" name="chal_rule" prop:role='["yb-chal-rule"]'></anvil-component>
+          </div>
+          <div class="sd-pick-chal-acts" role="group" aria-label="Take this week's challenge as">
+            <anvil-component type="Button" name="chal_rap" prop:text="As rap" prop:role='["btn", "btn-sm", "sc-btn-rap"]'></anvil-component>
+            <anvil-component type="Button" name="chal_poetry" prop:text="As poetry" prop:role='["btn", "btn-sm", "sc-btn-poetry"]'></anvil-component>
+            <anvil-component type="Button" name="chal_pop" prop:text="As pop" prop:role='["btn", "btn-sm", "sc-btn-pop"]'></anvil-component>
+            <anvil-component type="Button" name="chal_open" prop:text="Open your entry" prop:role='["btn", "btn-sm", "btn-primary", "ic-pen"]'></anvil-component>
+          </div>
+        </div>
       </div>
       <p class="muted small sd-tip"><i class="ic ic-bulb"></i> Tip: the <a href="#lab">Rhyme lab</a> and <a href="#beats">Beats &amp; theory</a> pages are open to everyone if you want to warm up first.</p>
     </div>

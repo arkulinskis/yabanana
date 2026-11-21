@@ -3,13 +3,14 @@
     <div class="ui-wrap">
       <div class="st-hero">
         <div>
-          <div class="eyebrow">The Stage</div>
           <h1 class="st-title"><anvil-component type="Label" name="hello" prop:role='["inline"]'></anvil-component> <span class="hl"><anvil-component type="Label" name="greet" prop:role='["inline"]'></anvil-component></span></h1>
           <anvil-component type="Label" name="lead" prop:role='["st-lead"]'></anvil-component>
         </div>
         <a class="ui-btn primary lg" href="#studio/new" anvil:name="start_link"><i class="ic ic-pen"></i>Start a song</a>
         <a class="ui-btn primary lg" href="#auth/signup" anvil:name="join_link"><i class="ic ic-banana"></i>Join the bunch</a>
       </div>
+
+      <anvil-component type="Yabanana.Components.ChallengeBanner" name="chal"></anvil-component>
 
       <div class="st-cta" anvil:name="guest_band">
         <div><h2 class="st-cta-h">Twelve beats. Twenty-four thousand rhymes. Zero blank-page panic.</h2>
@@ -30,6 +31,12 @@
         <a class="ui-btn primary" href="#studio/new" anvil:name="empty_write"><i class="ic ic-pen"></i>Write one</a>
         <a class="ui-btn primary" href="#auth/signup" anvil:name="empty_join">Join and write one</a>
       </div>
+
+      <section class="st-sec" anvil:name="lonely_part">
+        <div class="st-sec-head"><div><h2><i class="ic ic-chat"></i>Waiting for a first review</h2>
+          <p>Be someone's first reader. Writers who review others show up here first.</p></div></div>
+        <anvil-component type="RepeatingPanel" name="lonely_panel" prop:item_template="Yabanana.Items.SongCard" prop:role='["st-rail", "st-lonely"]'></anvil-component>
+      </section>
 
       <section class="st-sec" anvil:name="spot_part">
         <div class="st-sec-head"><div><h2><i class="ic ic-flame"></i>Spotlight</h2>

@@ -317,7 +317,8 @@ if "legal_server" in M:
 
 # ---------------------------------------------------------------------------------- every callable is covered by a permission check
 # A callable that changes data without require_user / a C.require_* check is a security hole. List the public ones here.
-PUBLIC = {"log_client_error", "session_ping", "get_me", "submit_feedback", "get_stage", "shuffle", "get_song", "get_charts", "get_writer", "legal_state", "legal_accept"}
+PUBLIC = {"log_client_error", "session_ping", "get_me", "submit_feedback", "get_stage", "shuffle", "get_song", "get_charts", "get_writer", "legal_state", "legal_accept",
+          "get_challenge", "challenge_banner"}
 for name, (f, need) in sorted(anvil.server.CALLABLES.items()):
     if name in PUBLIC:
         continue

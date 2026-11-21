@@ -50,8 +50,9 @@ def _score(v):
 
 
 @anvil.server.callable(require_user=True)
-def save_review(song_id, r1, r2, r3, text, fav_line=None):
-    """Write (or rewrite) your review of someone else's song."""
+def save_review(song_id, r1, r2, r3, text, fav_line=None, rework_line=None):
+    """Write (or rewrite) your review of someone else's song. fav_line / rework_line ("a line to rework") must be lines
+    of the song, else they are dropped."""
     me = C.require_user()
     r = public_song(song_id)
     if r is None:
@@ -64,9 +65,13 @@ def save_review(song_id, r1, r2, r3, text, fav_line=None):
     text = C.text(text, 1500, multiline=True)
     if len(text) < 10:
         return C.fail("Say a little more (at least 10 characters): what worked, what you'd change.")
+    lines = S.lines_of(r["sections"])
     fav = C.text(fav_line, 300)
-    if fav and fav not in S.lines_of(r["sections"]):
+    if fav and fav not in lines:
         fav = ""
+    rework = C.text(rework_line, 300)
+    if rework and rework not in lines:
+        rework = ""
     have = app_tables.reviews.get(song=r, author=me)
     if have is not None:
         have.update(r1=scores[0], r2=scores[1], r3=scores[2], text=text, fav_line=fav)
@@ -75,6 +80,7 @@ def save_review(song_id, r1, r2, r3, text, fav_line=None):
             return C.fail("That's a lot of reviews in one hour. Take a break and come back.")
         have = app_tables.reviews.add_row(song=r, author=me, r1=scores[0], r2=scores[1], r3=scores[2], text=text,
                                           fav_line=fav, created=C.now(), is_demo=False)
+    C.set_col(have, "rework_line", rework)  # its own statement: the column may not exist live yet
     S.recount(r)
     return C.ok(review=S.review_dict(have, me), rating=r["rating"], review_count=r["review_count"])
 

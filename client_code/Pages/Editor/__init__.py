@@ -8,20 +8,24 @@ from ... import router, state, yb
 from ...Items.SectionEditor import SectionEditor
 
 BPL = [(0.5, "bpl_half"), (1, "bpl_one"), (2, "bpl_two")]
+ASK_MAX = 140  # Songs.ASK_MAX on the server
 
 
 class Editor(EditorTemplate):
     """#studio/<id>: the writer's desk. Title, scene, mood, beat (12, with preview), tempo, bars per line, the step
     lights, sections (Items/SectionEditor: kind + text + the flow strip), the helper panel (rhymes for the word at the
     cursor, similes, metaphors, themes, sparks; a bottom sheet on phones), autosave, Play, Perform, Share to the
-    stage / Unpublish, Delete. Unsaved changes are saved when you leave the page."""
+    stage / Unpublish, Delete, "Ask your reviewers" (one question pinned on the song page). A draft started from the
+    Weekly Bar Challenge shows the challenge's rule above the sections with live checks (YB.challengeHtml), and the
+    flow strip aims at the rule's syllable count. Unsaved changes are saved when you leave the page."""
 
     def __init__(self, args=(), **properties):
         super().__init__(**properties)
         self.song_id = args[0] if args else ""
         self.song = {}
         self._dirty = self._saving = False
-        self._save_t = self._preview_t = None
+        self._save_t = self._preview_t = self._check_t = None
+        self.chal: dict = {}  # the Weekly Bar Challenge this draft was started for ({} = none)
         self._last = None  # the section editor the helper inserts into
         self._unsub = None
         self._unload = anvil.js.report_exceptions(self._before_unload)
@@ -30,6 +34,8 @@ class Editor(EditorTemplate):
         state.set_control_attr(self.mood_box, "aria-label", "Mood")
         state.set_control_attr(self.title_box, "aria-label", "Title")
         state.control(self.title_box).setAttribute("maxlength", "80")
+        state.control(self.ask_box).setAttribute("maxlength", str(ASK_MAX))
+        state.set_control_attr(self.ask_box, "aria-label", "Ask your reviewers (optional)")
         self.dom_nodes["bpm"].addEventListener("input", anvil.js.report_exceptions(self._bpm_input))
         self.dom_nodes["preview_box"].addEventListener("toggle", anvil.js.report_exceptions(self._preview_toggle))
         self.sections_panel.add_event_handler("x-sec", self._section_event)
@@ -52,6 +58,10 @@ class Editor(EditorTemplate):
             router.link(self.remix_link, "song", rx["id"])
             self.remix_by.text = "by " + rx["author"]["name"]
         self.mood_box.selected_value = self.song.get("mood") if self.song.get("mood") in yb.MOODS else ""
+        self.ask_box.text = self.song.get("ask") or ""
+        self._draw_ask()
+        self.chal = dict(self.song.get("challenge") or {})
+        self._draw_challenge()
         self.helper.scene = self.song["scene"]
         if state.store_get("previewOpen"):
             self.dom_nodes["preview_box"].setAttribute("open", "")
@@ -71,6 +81,41 @@ class Editor(EditorTemplate):
             for ed in self._editors():
                 ed.set_beat(self.song["beat"], self.song.get("bars_per_line") or 1)
             self._draw_preview()
+            self._draw_checks()
+
+    # ---- the Weekly Bar Challenge (a draft started from #challenge: Challenges.draft_info on the server)
+    def _target(self):
+        """The challenge's syllables-per-line rule, if it has one: the flow strip aims at it instead of the beat's."""
+        rule = (self.chal or {}).get("check") or {}
+        return rule.get("syll")
+
+    def _draw_challenge(self):
+        c = self.chal
+        self.chal_part.visible = bool(c)
+        if not c:
+            return
+        self.chal_week.text = "%s challenge" % c["label"]
+        self.chal_title.text = c["title"]
+        self.chal_rule.text = c["rule"]
+        router.link(self.chal_link, "challenge", c["week"])
+        if c.get("status") == "open":
+            self.chal_when.text = ("Share it to the stage before Sunday midnight UTC (%s) to enter. "
+                                   "Entries are ranked by bananas." % yb.time_left(c["ends"]))
+        else:
+            self.chal_when.text = "This challenge has closed. You can still share the song; it just won't count."
+        self._draw_checks()
+
+    def _draw_checks(self, *args):
+        self._check_t = None
+        if not self.chal:
+            return
+        text = "\n".join(sec["text"] for sec in self.song["sections"])
+        self.dom_nodes["chal_checks"].innerHTML = window.YB.challengeHtml(text, yb.to_js(self.chal.get("check") or {}),
+                                                                          self.chal.get("lines") or 0, self.chal.get("flip") or "")
+
+    def _draw_ask(self):
+        n = len(self.ask_box.text or "")
+        self.ask_hint.text = "Pinned above the reviews on your song page. %d/%d" % (n, ASK_MAX)
 
     def _draw_status(self):
         pub = self.song.get("status") == "published"
@@ -103,7 +148,7 @@ class Editor(EditorTemplate):
         s = self.song
         n = len(s["sections"])
         self.sections_panel.items = [{"index": i, "count": n, "kind": sec["kind"], "text": sec["text"], "beat": s["beat"],
-                                      "bpl": s.get("bars_per_line") or 1, "scene": s["scene"]}
+                                      "bpl": s.get("bars_per_line") or 1, "scene": s["scene"], "target": self._target()}
                                      for i, sec in enumerate(s["sections"])]
         self._last = None
         self._draw_preview()
@@ -121,7 +166,7 @@ class Editor(EditorTemplate):
     def _payload(self):
         s = self.song
         return {"title": s["title"], "scene": s["scene"], "mood": s.get("mood") or "", "beat": s["beat"], "bpm": s["bpm"],
-                "bars_per_line": s.get("bars_per_line") or 1, "sections": s["sections"]}
+                "bars_per_line": s.get("bars_per_line") or 1, "sections": s["sections"], "ask": s.get("ask") or ""}
 
     def _status(self, text, icon, dirty):
         self.save_text.text = text
@@ -199,10 +244,23 @@ class Editor(EditorTemplate):
         self._mark_dirty()
 
     def scene_click(self, event):
+        old = self.song["scene"]
         self.song["scene"] = str(event.currentTarget.getAttribute("data-v"))
+        beats = (self.chal or {}).get("beats") or {}
+        if beats and self.song["beat"] == beats.get(old) and beats.get(self.song["scene"]) not in (None, self.song["beat"]):
+            # a challenge entry follows the scene to that scene's challenge beat
+            b = yb.beat(beats[self.song["scene"]])
+            self.song["beat"], self.song["bpm"], self.song["bars_per_line"] = b["key"], b["bpm"], b.get("lines") or 1
+            state.toast("The challenge's %s beat: %s." % (yb.scene_name(self.song["scene"]).lower(), b["name"]))
         self.helper.scene = self.song["scene"]
         self._draw_ctl()
         self._draw_sections()
+        self._mark_dirty()
+
+    @handle("ask_box", "change")
+    def ask_box_change(self, **event_args):
+        self.song["ask"] = (self.ask_box.text or "").strip()[:ASK_MAX]
+        self._draw_ask()
         self._mark_dirty()
 
     @handle("mood_box", "change")
@@ -258,6 +316,10 @@ class Editor(EditorTemplate):
             if self._preview_t is not None:
                 window.clearTimeout(self._preview_t)
             self._preview_t = window.setTimeout(self._draw_preview, 220)
+            if self.chal:
+                if self._check_t is not None:
+                    window.clearTimeout(self._check_t)
+                self._check_t = window.setTimeout(self._draw_checks, 260)
         elif action == "kind":
             secs[index]["kind"] = value
             self._mark_dirty()
@@ -354,7 +416,10 @@ class Editor(EditorTemplate):
         self._draw_status()
         if flag:
             yb.confetti(self.publish_button, 30, None, 10)
-            state.toast("It's on the stage! 🍌", "ok")
+            if self.chal and self.chal.get("status") == "open":
+                state.toast("It's on the stage and in the %s challenge!" % self.chal["label"], "ok")
+            else:
+                state.toast("It's on the stage! 🍌", "ok")
         else:
             state.toast("Back to drafts. Only you can see it now.")
 

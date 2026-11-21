@@ -21,6 +21,10 @@ SCENES = ("rap", "poetry", "pop")
 BEATS = {"boombap": 90, "trap": 140, "drill": 142, "lofi": 78, "fourfloor": 120, "ballad": 72, "dembow": 96, "disco": 116,
          "iambic": 96, "trochaic": 104, "dactyl": 92, "anapest": 100}
 DEFAULT_BEAT = {"rap": "boombap", "pop": "fourfloor", "poetry": "iambic"}
+BARS_PER_LINE = {"dactyl": 2}  # beats whose line spans two bars (`lines` in theme/assets/yb-beats.js)
+ASK_MAX = 140  # "Ask your reviewers": the writer's one question, pinned on the song page
+LONELY = 6  # songs in the Stage's "Waiting for a first review" rail
+ACTIVE_REVIEWER = dt.timedelta(days=14)  # writers who reviewed someone in this window go first in that rail
 KINDS = ("Intro", "Verse", "Pre-chorus", "Chorus", "Hook", "Bridge", "Outro", "Stanza", "Couplet", "Refrain", "Spoken")
 MOODS = ("Hype", "Defiant", "Tender", "Heartbroken", "Dreamy", "Nostalgic", "Playful", "Dark", "Hopeful")
 # Review criteria per scene (r1, r2, r3).
@@ -82,7 +86,7 @@ def song_dict(r, me, upvoted=None, full=False, boosts=None):
          "updated": C.iso(r["updated"]), "published": C.iso(r["published"]), "author": author(r["owner"]),
          "upvotes": r["upvotes"] or 0, "upvoted": bool(upvoted and r.get_id() in upvoted), "mine": mine,
          "review_count": r["review_count"] or 0, "rating": r["rating"], "featured": bool(r["featured"]),
-         "hidden": bool(r["hidden"]), "demo": bool(r["is_demo"]),
+         "hidden": bool(r["hidden"]), "demo": bool(r["is_demo"]), "ask": C.col(r, "ask", ""),
          "remix_of": ({"id": remix.get_id(), "title": remix["title"], "author": author(remix["owner"])}
                       if remix is not None and can_see(remix, me) else None)}
     if boosts is not None:
@@ -113,7 +117,10 @@ def recount(song):
 
 
 def delete_children(song):
-    for t in (app_tables.upvotes, app_tables.reviews, app_tables.promotions, app_tables.reports):
+    entries = C.table("challenge_entries")
+    for t in (app_tables.upvotes, app_tables.reviews, app_tables.promotions, app_tables.reports, entries):
+        if t is None:
+            continue
         for row in t.search(song=song):
             row.delete()
     for child in app_tables.songs.search(remix_of=song):
@@ -140,12 +147,27 @@ def get_stage(scene=None):
     spot.sort(key=lambda r: (bool(r["featured"]), boosts.get(r.get_id(), 0), C.iso(latest.get(r.get_id())) or ""), reverse=True)
     fresh = sorted(pool, key=lambda r: r["published"] or r["created"], reverse=True)[:6]
     writers = {r["owner"].get_id() for r in pool if r["owner"] is not None}
-    return {"songs": [song_dict(r, me, up) for r in random.sample(rows, min(12, len(rows)))],
-            "spotlight": [song_dict(r, me, up, boosts=boosts) for r in spot[:8]],
+    from . import Challenges
+    weeks = Challenges.weeks_by_song()
+    return {"songs": Challenges.tag([song_dict(r, me, up) for r in random.sample(rows, min(12, len(rows)))], weeks),
+            "spotlight": Challenges.tag([song_dict(r, me, up, boosts=boosts) for r in spot[:8]], weeks),
             "fresh": [song_dict(r, me, up) for r in fresh],
+            "lonely": Challenges.tag([song_dict(r, me, up) for r in lonely_songs(pool, me)], weeks),
             "counts": {"songs": len(pool), "writers": len(writers),
                        "upvotes": sum((r["upvotes"] or 0) for r in pool)},
-            "promos_left": promos_left(me)}
+            "promos_left": promos_left(me),
+            "challenge": Challenges.summary(me)}
+
+
+def lonely_songs(pool, me):
+    """Public songs nobody has reviewed yet (never the caller's own): writers who reviewed someone else in the last
+    14 days first (give to get), then the newest."""
+    cut = C.now() - ACTIVE_REVIEWER
+    givers = {v["author"].get_id() for v in app_tables.reviews.search(created=q.greater_than(cut)) if v["author"] is not None}
+    rows = [r for r in pool if not (r["review_count"] or 0) and (me is None or r["owner"] != me)]
+    rows.sort(key=lambda r: (r["owner"] is not None and r["owner"].get_id() in givers, C.iso(r["published"] or r["created"]) or ""),
+              reverse=True)
+    return rows[:LONELY]
 
 
 @anvil.server.callable
@@ -162,7 +184,7 @@ def shuffle(scene=None, count=12):
 # ----------------------------------------------------------------------------------------------- one song
 def review_dict(v, me):
     return {"id": v.get_id(), "author": author(v["author"]), "r": [v["r1"], v["r2"], v["r3"]], "text": v["text"] or "",
-            "fav_line": v["fav_line"] or "", "created": C.iso(v["created"]),
+            "fav_line": v["fav_line"] or "", "rework_line": C.col(v, "rework_line", ""), "created": C.iso(v["created"]),
             "mine": me is not None and v["author"] == me, "can_delete": me is not None and (v["author"] == me or C.is_admin(me))}
 
 
@@ -179,7 +201,10 @@ def get_song(song_id):
     boosts = boosts_by_song()
     promoted = me is not None and len(app_tables.promotions.search(song=r, user=me, created=q.greater_than(C.now() - WEEK))) > 0
     more = [x for x in public_songs() if x["owner"] == r["owner"] and x != r][:4]
+    favs = Counter(v["fav_line"] for v in revs if v["fav_line"])
+    from . import Challenges
     return C.ok(song=song_dict(r, me, up, full=True, boosts=boosts), criteria=CRITERIA.get(r["scene"], CRITERIA["rap"]),
+                fav_counts=dict(favs), challenge=Challenges.song_info(r),
                 reviews=[review_dict(v, me) for v in revs],
                 my_review=review_dict(my_review, me) if my_review else None,
                 can_review=me is not None and not mine and is_public(r),
@@ -210,8 +235,9 @@ def my_songs():
     me = C.require_user()
     rows = sorted(app_tables.songs.search(owner=me), key=lambda r: r["updated"] or r["created"], reverse=True)
     up = my_upvoted(me)
-    songs = [song_dict(r, me, up) for r in rows]
-    return {"songs": songs, "totals": {"published": len([s for s in songs if s["status"] == "published"]),
+    from . import Challenges
+    songs = Challenges.tag([song_dict(r, me, up) for r in rows])
+    return {"songs": songs, "challenge": Challenges.summary(me), "totals": {"published": len([s for s in songs if s["status"] == "published"]),
                                        "drafts": len([s for s in songs if s["status"] != "published"]),
                                        "upvotes": sum(s["upvotes"] for s in songs),
                                        "reviews": sum(s["review_count"] for s in songs)}}
@@ -238,7 +264,10 @@ def get_draft(song_id):
     r = C.row_by_id(app_tables.songs, song_id)
     if r is None or r["owner"] != me:
         return C.fail("You can only edit your own songs.")
-    return C.ok(song=song_dict(r, me, my_upvoted(me), full=True))
+    from . import Challenges
+    d = song_dict(r, me, my_upvoted(me), full=True)
+    d["challenge"] = Challenges.draft_info(r)
+    return C.ok(song=d)
 
 
 @anvil.server.callable(require_user=True)
@@ -270,6 +299,8 @@ def save_song(song_id, data):
     if r["status"] == "published" and "sections" in ch and len(lines_of(ch["sections"])) < 2:
         return C.fail("A published song needs at least two lines. Unpublish it first to clear it.")
     r.update(**ch)
+    if "ask" in data:  # its own statement: the column may not exist live until the schema change is accepted
+        C.set_col(r, "ask", C.text(data["ask"], ASK_MAX))
     return C.ok(saved=C.iso(ch["updated"]))
 
 
@@ -358,11 +389,12 @@ def get_writer(user_id):
     up = my_upvoted(me)
     rows = sorted([r for r in app_tables.songs.search(owner=u) if is_public(r)],
                   key=lambda r: r["published"] or r["created"], reverse=True)
-    songs = [song_dict(r, me, up) for r in rows]
+    from . import Challenges
+    songs = Challenges.tag([song_dict(r, me, up) for r in rows])
     reviews_given = len(app_tables.reviews.search(author=u))
     return C.ok(writer={"id": u.get_id(), "name": C.name_of(u), "scene": u["scene"] or "", "bio": u["bio"] or "",
                         "joined": C.iso(u["signed_up"]), "me": me is not None and u == me},
-                songs=songs, totals={"songs": len(songs), "upvotes": sum(s["upvotes"] for s in songs),
+                challenges=Challenges.writer_stats(u), songs=songs, totals={"songs": len(songs), "upvotes": sum(s["upvotes"] for s in songs),
                                      "reviews_given": reviews_given,
                                      "bunch": len(app_tables.upvotes.search(user=u))})
 
@@ -382,3 +414,49 @@ def get_bunch():
         d["liked"] = C.iso(u["created"])
         out.append(d)
     return {"songs": out}
+
+
+# ----------------------------------------------------------------------------------------------- what's new on my songs
+ACTIVITY_MAX = 20
+ACTIVITY_DAYS = 60
+
+
+def _since(value, now):
+    """The browser's last visit (an ISO time this server gave it), kept between 60 days ago and now; 14 days ago if
+    there's none."""
+    try:
+        t = dt.datetime.fromisoformat(str(value))
+        if t.tzinfo is None:
+            t = t.replace(tzinfo=dt.timezone.utc)
+    except (TypeError, ValueError):
+        return now - dt.timedelta(days=14)
+    return max(now - dt.timedelta(days=ACTIVITY_DAYS), min(now, t))
+
+
+@anvil.server.callable(require_user=True)
+def my_activity(since=None):
+    """The Studio's "New since your last visit": reviews, bananas and remixes OTHER people gave YOUR songs after
+    `since`. Newest first, at most 20. Returns the server's `now` for the browser to remember."""
+    me = C.require_user()
+    now = C.now()
+    t = _since(since, now)
+    events = []
+    for s in app_tables.songs.search(owner=me):
+        song = {"id": s.get_id(), "title": s["title"] or "Untitled"}
+        ups = [u for u in app_tables.upvotes.search(song=s, created=q.greater_than(t))
+               if u["user"] is not None and u["user"] != me]
+        if ups:
+            events.append({"kind": "bananas", "n": len(ups), "song": song, "when": C.iso(max(u["created"] for u in ups))})
+        for v in app_tables.reviews.search(song=s, created=q.greater_than(t)):
+            if v["author"] is None or v["author"] == me:
+                continue
+            events.append({"kind": "review", "who": author(v["author"]), "song": song,
+                           "rating": round((v["r1"] + v["r2"] + v["r3"]) / 3.0, 1), "when": C.iso(v["created"]),
+                           "rework": bool(C.col(v, "rework_line", ""))})
+        for x in app_tables.songs.search(remix_of=s):
+            if x["owner"] is None or x["owner"] == me or not is_public(x) or x["published"] is None or x["published"] <= t:
+                continue
+            events.append({"kind": "remix", "who": author(x["owner"]), "song": song,
+                           "remix": {"id": x.get_id(), "title": x["title"] or "Untitled"}, "when": C.iso(x["published"])})
+    events.sort(key=lambda e: e["when"] or "", reverse=True)
+    return {"events": events[:ACTIVITY_MAX], "now": C.iso(now), "since": C.iso(t)}

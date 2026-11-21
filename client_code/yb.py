@@ -139,3 +139,26 @@ def copy_text(text):
 def page_url(hash_part):
     loc = window.location
     return str(loc.href).split("#")[0].split("?")[0] + hash_part
+
+
+def song_link(song_id):
+    """The song's shareable address, https://<this site>/s/<slug> (server_code/SongLinks.py serves it with the song's
+    own link preview). Slug = the row id without brackets, comma -> "-"."""
+    slug = str(song_id or "").replace("[", "").replace("]", "").replace(" ", "").replace(",", "-")
+    return str(window.location.origin) + "/s/" + slug
+
+
+def time_left(ends_iso):
+    """'4 days left', '1 day left', '5 hours left', 'ends soon' or 'ended' for an ISO end time (browser clock)."""
+    if not ends_iso:
+        return ""
+    secs = (window.Date.parse(ends_iso) - window.Date.now()) / 1000
+    if secs <= 0:
+        return "ended"
+    days = int(secs // 86400)
+    if days >= 1:
+        return "%d day%s left" % (days, "" if days == 1 else "s")
+    hours = int(secs // 3600)
+    if hours >= 1:
+        return "%d hour%s left" % (hours, "" if hours == 1 else "s")
+    return "ends soon"

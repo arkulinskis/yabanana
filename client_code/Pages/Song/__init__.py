@@ -1,5 +1,7 @@
+import anvil.js
 import anvil.server
 from anvil import *
+from anvil.js import window
 
 from ._anvil_designer import SongTemplate
 from ... import router, state, yb
@@ -7,12 +9,15 @@ from ... import router, state, yb
 
 class Song(SongTemplate):
     """#song/<id>: one song, open to everyone (drafts and hidden songs: their writer and admins only).
-    Lyrics with the rhyme map, Perform mode, the beat card, upvote, promote, remix, share, report, and reviews
-    (three ratings named for the scene + text + favourite line). Every action reloads the page's data."""
+    Lyrics with the rhyme map, Perform mode, the beat card, upvote, promote, remix, share (lyric card + /s/ link:
+    Dialogs/ShareSong), report, the writer's question pinned above the reviews ("ask"), and reviews (three ratings
+    named for the scene + text + favourite line + a line to rework). #song/<id>/review scrolls to the review form.
+    Every action reloads the page's data."""
 
     def __init__(self, args=(), **properties):
         super().__init__(**properties)
         self.song_id = args[0] if args else ""
+        self._to_review = len(args) > 1 and args[1] == "review"  # #song/<id>/review: from "Be the first review"
         self.data = {}
         self._stop = None
         self.scheme_box.checked = bool(state.store_get("rhymeMap", True))
@@ -46,6 +51,12 @@ class Song(SongTemplate):
         self.badge.scene = s["scene"]
         self.mood.text, self.mood.visible = s.get("mood") or "", bool(s.get("mood"))
         self.staff_pick.visible = bool(s.get("featured"))
+        ch = d.get("challenge")
+        self.chal_link.visible = bool(ch)
+        if ch:
+            bits = [ch["label"]] + (["winner"] if ch.get("won") else ["#%d" % ch["rank"]] if ch.get("rank") else [])
+            self.chal_link.text = " · ".join(bits)
+            router.link(self.chal_link, "challenge", ch["week"])
         self.boosted.visible = bool(s.get("boosts"))
         self.boosted_text.text = "Promoted ×%s" % s.get("boosts")
         self.title.text = s["title"]
@@ -82,6 +93,10 @@ class Song(SongTemplate):
         reviews = d["reviews"]
         self.review_n.text = str(len(reviews))
         crit = d["criteria"]
+        ask = s.get("ask") or ""
+        self.ask_part.visible = bool(ask)
+        self.ask_who.text = "You asked your reviewers:" if s.get("mine") else "%s asks:" % (a.get("name") or "The writer").split(" ")[0]
+        self.ask_text.text = ask
         self.form_part.visible = bool(d.get("can_review"))
         self.join_note.visible = not me and published
         self.own_note.visible = bool(s.get("mine"))
@@ -121,6 +136,9 @@ class Song(SongTemplate):
         self.fav_box.items = [("None picked", "")] + [(ln, ln) for ln in lines]
         self.fav_box.selected_value = mine["fav_line"] if mine and mine.get("fav_line") in lines else ""
         state.set_control_attr(self.fav_box, "aria-label", "Favourite line (optional)")
+        self.rework_box.items = [("None picked", "")] + [(ln, ln) for ln in lines]
+        self.rework_box.selected_value = mine["rework_line"] if mine and mine.get("rework_line") in lines else ""
+        state.set_control_attr(self.rework_box, "aria-label", "A line to rework (optional)")
         self.delete_mine_button.visible = bool(mine)
         self.post_button.text = "Update review" if mine else "Post review"
         self.review_msg.visible = False
@@ -134,6 +152,13 @@ class Song(SongTemplate):
     def form_show(self, **event_args):
         if self._stop is None:
             self._stop = yb.on_upvote(self._heard)
+        if self._to_review:
+            self._to_review = False
+            window.setTimeout(self._scroll_to_review, 250)
+
+    def _scroll_to_review(self):
+        target = self.form_part if self.form_part.visible else self.ask_part if self.ask_part.visible else self.reviews_panel
+        anvil.js.get_dom_node(target).scrollIntoView(yb.to_js({"block": "center", "behavior": "smooth"}))
 
     @handle("", "hide")
     def form_hide(self, **event_args):
@@ -153,12 +178,9 @@ class Song(SongTemplate):
 
     @handle("share_button", "click")
     def share_button_click(self, **event_args):
-        url = yb.page_url(router.href("song", self.song_id))
-        if yb.copy_text(url):
-            state.toast("Link copied", "ok")
-        else:
-            from ...Dialogs.ShareLink import ShareLink
-            alert(ShareLink(url=url), buttons=[], role="app-dialog")
+        from ...Dialogs.ShareSong import ShareSong
+        alert(ShareSong(song=self.data["song"], fav_counts=self.data.get("fav_counts") or {}), buttons=[], large=True,
+              role="app-dialog")
 
     @handle("promote_button", "click")
     def promote_button_click(self, **event_args):
@@ -212,7 +234,7 @@ class Song(SongTemplate):
         self.post_button.enabled = False
         try:
             r = anvil.server.call("save_review", self.song_id, scores[0], scores[1], scores[2], self.review_box.text or "",
-                                  self.fav_box.selected_value or None)
+                                  self.fav_box.selected_value or None, self.rework_box.selected_value or None)
         finally:
             self.post_button.enabled = True
         if not r.get("ok"):

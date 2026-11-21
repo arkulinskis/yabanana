@@ -11,8 +11,10 @@ GREET = ["What are we writing today?", "The beat is warming up.", "Fresh page, f
 
 
 class Stage(StageTemplate):
-    """#home, #home/<scene>: the Stage, open to everyone. Random songs (Shuffle), the Spotlight (staff picks + songs
-    members promoted this week), fresh drops, counts. Upvotes need an account (visitors get the Join nudge)."""
+    """#home, #home/<scene>: the Stage, open to everyone. This week's challenge banner, random songs (Shuffle),
+    "Waiting for a first review" (unreviewed songs, never your own, with a Be the first review chip), the Spotlight
+    (staff picks + songs members promoted this week), fresh drops, counts. Upvotes need an account (visitors get the
+    Join nudge)."""
 
     def __init__(self, args=(), **properties):
         super().__init__(**properties)
@@ -31,7 +33,11 @@ class Stage(StageTemplate):
         self.empty_title.text = "No %ssongs yet" % (yb.scene_name(self.scene) + " " if self.scene else "")
         state.heading(self.empty_title, 3)
         d = state.call("get_stage", self.scene or None)
+        self.chal.data = d.get("challenge")
         self._songs(d["songs"])
+        lonely = [dict(x, _first=True) for x in d.get("lonely") or []]
+        self.lonely_part.visible = bool(lonely)
+        self.lonely_panel.items = lonely
         self.spot_part.visible = bool(d["spotlight"])
         self.spot_panel.items = d["spotlight"]
         self.spot_text.text = "Staff picks and songs members promoted this week." + (

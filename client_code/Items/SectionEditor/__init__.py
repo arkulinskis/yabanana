@@ -7,7 +7,8 @@ from ... import state, yb
 
 
 class SectionEditor(SectionEditorTemplate):
-    """Studio editor: one section (Verse, Chorus, Stanza ...). item = {index, count, kind, text, beat, bpl, scene}.
+    """Studio editor: one section (Verse, Chorus, Stanza ...). item = {index, count, kind, text, beat, bpl, scene,
+    target} (target = a challenge's [min, max] syllables per line, or None).
 
     Tells the Editor page what happened by raising x-sec on the panel: action = "text" (value = the new text),
     "kind", "move" (value = -1 / 1), "dup", "del", "focus" (the helper inserts here) or "caret" (value = the word
@@ -18,6 +19,7 @@ class SectionEditor(SectionEditorTemplate):
         super().__init__(**properties)
         i = self.item
         self._beat, self._bpl = i.get("beat") or "boombap", i.get("bpl") or 1
+        self._target = i.get("target")  # [min, max] syllables from a challenge rule, else the beat's own target
         self._flow_t = None
         self._caret_t = None
         self.classes["sc-" + (i.get("scene") or "rap")] = True
@@ -81,7 +83,8 @@ class SectionEditor(SectionEditorTemplate):
     # ---- the flow strip
     def _draw_flow(self, *args):
         self._flow_t = None
-        self.dom_nodes["flow"].innerHTML = window.YB.flowHtml(self.text_box.text or "", self._beat, self._bpl)
+        self.dom_nodes["flow"].innerHTML = window.YB.flowHtml(self.text_box.text or "", self._beat, self._bpl,
+                                                              yb.to_js(self._target) if self._target else None)
 
     def set_beat(self, beat, bpl):
         self._beat, self._bpl = beat, bpl

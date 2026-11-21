@@ -4,6 +4,7 @@
     <anvil-component type="Yabanana.Components.SceneBadge" name="badge" bind:scene="self.item['scene']"></anvil-component>
     <anvil-component type="Label" name="mood" prop:role='["mood"]' bind:text="self.item['mood']" bind:visible="bool(self.item['mood'])"></anvil-component>
     <span class="flag" anvil:name="flag"><i class="ic" anvil:name="flag_icon"></i><anvil-component type="Label" name="flag_text" prop:role='["flag-text"]'></anvil-component></span>
+    <anvil-component type="Link" name="chal_link" prop:role='["yb-chal-tag", "ic-trophy"]' prop:visible="false"></anvil-component>
   </div>
   <h3><anvil-component type="Link" name="title_link" prop:role='["card-link"]' bind:text="self.item['title']"></anvil-component></h3>
   <blockquote class="yb-excerpt">
@@ -24,6 +25,7 @@
   <div class="yb-card-foot">
     <anvil-component type="Yabanana.Components.BeatChip" name="chip"></anvil-component>
     <span class="grow"></span>
+    <anvil-component type="Link" name="first_link" prop:text="Be the first review" prop:role='["yb-first", "ic-chat"]' prop:visible="false"></anvil-component>
     <span class="yb-count" anvil:name="reviews" title="Reviews"><i class="ic ic-chat"></i><anvil-component type="Label" name="review_count" bind:text="str(self.item['review_count'])"></anvil-component></span>
     <anvil-component type="Yabanana.Components.Upvote" name="upvote"></anvil-component>
   </div>

@@ -126,8 +126,43 @@ REVIEWS = [
 # (song, promoter: ("w"|"l", i), days ago): this week's Spotlight.
 PROMOTIONS = [(11, ("w", 0), 1), (11, ("l", 2), 2), (14, ("w", 4), 1), (13, ("l", 3), 2), (6, ("w", 7), 3)]
 
-# Tables that hold demo rows (each has an is_demo column). Children before parents.
-DEMO_TABLES = ["promotions", "reviews", "upvotes", "songs"]
+# The first week of the Weekly Bar Challenge (Challenges.CHALLENGES[0], "Flip it: GLASS"): four entries written to the
+# prompt, shared during the challenge's first week (whenever that is: the dates are worked out at load time).
+# (writer index, scene, beat, bpm, mood, title, when in the week 0..1, ask, [(kind, text)...], upvotes)
+CHALLENGE_SONGS = [
+    (0, "poetry", "iambic", 96, "Tender", "Through the Glass", 0.18, "Does the turn in the last two lines land, or is it too neat?", [
+        ("Stanza", "My grandmother would read the morning glass\nthe way that sailors read the sky for rain:\n"
+                   "a fingerprint, a breath that wouldn't pass,\na crack she called a river, not a stain."),
+        ("Stanza", "She drank her water from a jelly glass\nand wore her reading glasses on a chain;\n"
+                   "I keep them both. I watch the seasons pass.\nThe glass is clear. I see her all the same.")], 11),
+    (1, "rap", "lofi", 78, "Defiant", "Glass House Rules", 0.3, "", [
+        ("Verse", "Grew up in a glass house, so I learned to throw my voice, not stones,\nMama kept a glass jar full of quarters for the phone,\n"
+                  "every corner store had bulletproof glass between the gum and me,\nnow I'm pressing every bar against it till the whole block sees."),
+        ("Hook", "Glass on the left, glass on the right,\nI can see my reflection rapping back at night,\n"
+                 "raise a glass to the kid with the cracked phone screen,\nevery crack is a window, every window is a scene.")], 9),
+    (6, "pop", "ballad", 72, "Hopeful", "Half a Glass", 0.45, "Does 'stained glass' feel earned, or too cute?", [
+        ("Verse", "You always said I saw it half a glass,\nhalf-empty, half-hearted, half of what we had,\n"
+                  "so I filled it up with rain on the window pane\nand I drank to every Tuesday that I didn't call your name."),
+        ("Chorus", "Raise a glass, raise a glass\nto the girl who finally let it pass,\n"
+                   "I'm not broken, I'm just stained glass,\nlet the light come through, let the light come through at last.")], 7),
+    (5, "rap", "lofi", 78, "Hype", "Glass Jaw", 0.62, "Is the hook hard enough to chant?", [
+        ("Hook", "They said I got a glass jaw, I said watch me take the hit,\nhourglass on the table and I'm racing every grain of it."),
+        ("Verse", "Glass slipper on the curb, I ain't waiting on a prince,\nI been running since the bell rang, ain't nobody caught me since,\n"
+                  "windshield got a spiderweb, I call it modern art,\nevery crack another rhyme and every rhyme another start,\n"
+                  "pour a glass of something cold, I'm the coolest in the room,\nI'm the shatter and the sweep-up, I'm the broom and the boom.")], 3),
+]
+# (entry, reviewer ("w"|"l", i), r1, r2, r3, text, favourite line index or None, line-to-rework index or None)
+CHALLENGE_REVIEWS = [
+    (0, ("w", 4), 5, 5, 4, "Reading the window like weather is such a good opening. The jelly glass makes her real.", 4, 6),
+    (0, ("l", 0), 5, 4, 5, "The last line got me. I think the turn lands; 'seasons pass' is the only soft spot.", 7, 6),
+    (1, ("w", 3), 4, 5, 4, "Bulletproof glass between the gum and me: that's the bar. Hook is simple and it works.", 2, 1),
+    (2, ("w", 2), 4, 4, 5, "Stained glass is earned because the verse sets up the light. The Tuesday line is perfect.", 3, 1),
+]
+CHALLENGE_FANS = [("l", 1), ("l", 2), ("l", 3), ("l", 4), ("l", 5), ("w", 2), ("w", 3), ("w", 4), ("w", 7), ("l", 0), ("w", 6), ("w", 1)]
+
+# Tables that hold demo rows (each has an is_demo column). Children before parents. challenge_entries is new: it
+# doesn't exist live until the user accepts the schema change, so every use goes through C.table().
+DEMO_TABLES = ["challenge_entries", "promotions", "reviews", "upvotes", "songs"]
 
 
 def state():
@@ -178,7 +213,55 @@ def load():
     for r in songs:
         Songs.recount(r)
     C.set_setting("demo", "loaded")
+    load_challenge()
     return counts()
+
+
+def load_challenge():
+    """The demo entries of the Weekly Bar Challenge's first week (see CHALLENGE_SONGS). Replaces any old ones."""
+    from . import Songs, Challenges
+    t = C.table("challenge_entries")
+    if t is None:
+        return
+    for e in list(t.search(is_demo=True)):
+        s = e["song"]
+        e.delete()
+        if s is not None and s["is_demo"]:
+            Songs.delete_children(s)
+            s.delete()
+    writers = [_person(n, e, sc, b) for n, e, sc, b in WRITERS]
+    listeners = [_person(n, e) for n, e in LISTENERS]
+    who = lambda ref: writers[ref[1]] if ref[0] == "w" else listeners[ref[1]]  # noqa: E731
+    key = Challenges.epoch()
+    start = Challenges.start_of(key)
+    now = C.now()
+    shared_by = min(now, start + Challenges.WEEK)  # entries go in during the challenge week, never in the future
+    votes_by = min(now, start + 2 * Challenges.WEEK)
+    songs = []
+    for i, (w, scene, beat, bpm, mood, title, at, ask, sections, ups) in enumerate(CHALLENGE_SONGS):
+        when = start + (shared_by - start) * at
+        r = app_tables.songs.add_row(owner=writers[w], title=title, scene=scene, mood=mood, beat=beat, bpm=bpm, bars_per_line=1,
+                                     sections=[{"kind": k, "text": x} for k, x in sections], status="published",
+                                     created=when, updated=when, published=when, upvotes=0, review_count=0, rating=None,
+                                     featured=False, hidden=False, is_demo=True)
+        if ask:
+            C.set_col(r, "ask", ask)
+        t.add_row(song=r, user=writers[w], week=key, created=when, is_demo=True)
+        songs.append(r)
+        fans = [p for p in (who(ref) for ref in CHALLENGE_FANS) if p != writers[w]]
+        for k in range(min(ups, len(fans))):
+            app_tables.upvotes.add_row(user=fans[k], song=r, is_demo=True, created=when + (votes_by - when) * ((k + 1) / (ups + 2.0)))
+    for si, ref, a, b, c, text, fav, rework in CHALLENGE_REVIEWS:
+        song = songs[si]
+        lines = Songs.lines_of(song["sections"])
+        v = app_tables.reviews.add_row(song=song, author=who(ref), r1=a, r2=b, r3=c, text=text,
+                                       fav_line=lines[fav] if fav is not None and fav < len(lines) else "",
+                                       created=song["published"] + (votes_by - song["published"]) * 0.5, is_demo=True)
+        if rework is not None and rework < len(lines):
+            C.set_col(v, "rework_line", lines[rework])
+    for r in songs:
+        Songs.recount(r)
+    C.set_setting("challenge_demo", "loaded")
 
 
 def remove(remember=True):
@@ -186,7 +269,8 @@ def remove(remember=True):
     for s in app_tables.songs.search(is_demo=True):
         Songs.delete_children(s)
     for name in DEMO_TABLES:
-        for r in getattr(app_tables, name).search(is_demo=True):
+        t = C.table(name)
+        for r in (t.search(is_demo=True) if t is not None else []):
             r.delete()
     touched = []
     for u in list(app_tables.users.search(is_demo=True)):
@@ -210,5 +294,7 @@ def remove(remember=True):
 def counts():
     out = {"users": len(app_tables.users.search(is_demo=True))}
     for name in DEMO_TABLES:
-        out[name] = len(getattr(app_tables, name).search(is_demo=True))
+        t = C.table(name)
+        if t is not None:
+            out[name.replace("_", " ")] = len(t.search(is_demo=True))
     return out

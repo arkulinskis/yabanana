@@ -10,4 +10,8 @@
   <anvil-component type="Label" name="scores" prop:role='["sg-rs"]'></anvil-component>
   <anvil-component type="Label" name="text" prop:role='["sg-txt"]' bind:text="self.item['text']"></anvil-component>
   <anvil-component type="Label" name="fav" prop:role='["sg-fav"]' bind:visible="bool(self.item['fav_line'])"></anvil-component>
+  <div class="sg-rework" anvil:name="rework_part">
+    <anvil-component type="Label" name="rework_lbl" prop:role='["sg-rework-lbl"]' prop:text="A line to rework"></anvil-component>
+    <anvil-component type="Label" name="rework" prop:role='["sg-rework-line"]'></anvil-component>
+  </div>
 </div>
